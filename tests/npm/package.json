@@ -1,0 +1,138 @@
+{
+    "name": "fundevogel.de",
+    "version": "1.0.0",
+    "description": "Source code of fundevogel.de",
+    "author": "S1SYPHOS <hello@twobrain.io>",
+    "homepage": "https://fundevogel.de",
+    "main": "Gulpfile.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/two-brain/fundevogel.de.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/two-brain/fundevogel.de/issues"
+    },
+    "keywords": [
+        "gulp",
+        "kirby",
+        "cms",
+        "starterkit"
+    ],
+    "scripts": {
+        "start": "gulp",
+        "build": "NODE_ENV=production gulp build",
+        "assets": "gulp styles && gulp scripts && gulp images && gulp fonts",
+        "styles": "gulp styles",
+        "scripts": "gulp scripts",
+        "images": "gulp images",
+        "fonts": "gulp fonts",
+        "deploy": "NODE_ENV=production gulp build && gulp deploy",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@barba/core": "2.9.7",
+        "animejs": "3.2.1",
+        "bigpicture": "https://github.com/fundevogel/bigpicture.git",
+        "dropkickjs": "2.2.4",
+        "embla-carousel": "4.0.5",
+        "infinite-scroll": "3.0.6",
+        "lazysizes": "5.2.2",
+        "macy": "2.5.1",
+        "tailwindcss": "1.8.12",
+        "tailwindcss-aspect-ratio": "3.0.0",
+        "tippy.js": "6.2.6"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.11.0",
+        "@babel/preset-env": "^7.11.0",
+        "@types/animejs": "^3.1.2",
+        "@types/gulp": "^4.0.8",
+        "@types/node": "^14.0.27",
+        "autoprefixer": "^9.8.6",
+        "babel-eslint": "^10.1.0",
+        "browser-sync": "^2.26.12",
+        "child_process": "1.0.2",
+        "del": "5.1.0",
+        "eslint": "^7.6.0",
+        "eslint-config-google": "0.14.0",
+        "fs": "^0.0.1-security",
+        "glyphhanger": "3.2.0",
+        "gulp": "4.0.2",
+        "gulp-autoprefixer": "7.0.1",
+        "gulp-babel": "8.0.0",
+        "gulp-clean-css": "4.3.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-connect-php": "1.0.3",
+        "gulp-eslint": "6.0.0",
+        "gulp-favicons": "2.4.0",
+        "gulp-filter": "6.0.0",
+        "gulp-flatten": "0.4.0",
+        "gulp-if": "3.0.0",
+        "gulp-imagemin": "7.1.0",
+        "gulp-newer": "1.4.0",
+        "gulp-postcss": "8.0.0",
+        "gulp-rename": "2.0.0",
+        "gulp-rev": "^9.0.0",
+        "gulp-stylelint": "13.0.0",
+        "gulp-terser": "^1.2.1",
+        "gulp-uglify": "3.0.2",
+        "gulp-webp": "^4.0.1",
+        "imagemin-pngquant": "^9.0.0",
+        "penthouse": "^2.3.1",
+        "precss": "4.0.0",
+        "stylelint": "^13.6.1",
+        "stylelint-config-recommended": "^3.0.0",
+        "ts-loader": "^8.0.2",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.7",
+        "vinyl-named": "1.1.0",
+        "webpack-stream": "5.2.1"
+    },
+    "stylelint": {
+        "extends": "stylelint-config-recommended",
+        "rules": {
+            "at-rule-no-unknown": [
+                true,
+                {
+                    "ignoreAtRules": [
+                        "tailwind",
+                        "apply",
+                        "variants",
+                        "responsive",
+                        "screen"
+                    ]
+                }
+            ],
+            "declaration-block-trailing-semicolon": null,
+            "no-descending-specificity": null
+        }
+    },
+    "eslintConfig": {
+        "extends": [
+            "eslint:recommended",
+            "google"
+        ],
+        "env": {
+            "browser": true,
+            "node": true,
+            "es6": true,
+            "amd": true,
+            "commonjs": true
+        },
+        "parser": "babel-eslint",
+        "parserOptions": {
+            "sourceType": "module"
+        },
+        "rules": {
+            "require-jsdoc": [
+                "off"
+            ]
+        }
+    },
+    "browserslist": [
+        "last 3 versions",
+        "> 1%",
+        "IE >= 9"
+    ]
+}
