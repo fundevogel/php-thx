@@ -5,6 +5,7 @@ namespace S1SYPHOS;
 
 use S1SYPHOS\Traits\Caching;
 use S1SYPHOS\Traits\Helpers;
+use S1SYPHOS\Traits\Remote;
 
 
 abstract class Driver
@@ -15,6 +16,7 @@ abstract class Driver
 
     use Caching;
     use Helpers;
+    use Remote;
 
 
     /**
@@ -46,6 +48,14 @@ abstract class Driver
 
 
     /**
+     * List of packages not to be processed
+     *
+     * @var array
+     */
+    public $blockList = [];
+
+
+    /**
      * Constructor
      *
      * @param string $dataFile Path to data file
@@ -61,6 +71,22 @@ abstract class Driver
 
         # Extract raw data
         $this->data = $this->extract($pkgData, $lockFile);
+    }
+
+
+    /**
+     * Setters & getters
+     */
+
+    public function setBlockList(int $blockList): void
+    {
+        $this->blockList = $blockList;
+    }
+
+
+    public function getBlockList(): array
+    {
+        return $this->blockList;
     }
 
 
@@ -135,4 +161,20 @@ abstract class Driver
      * @return array Processed data
      */
     abstract protected function process(): array;
+
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * Converts days to seconds
+     *
+     * @param int $days
+     * @return int
+     */
+    protected function days2seconds(int $days): int
+    {
+        return $days * 24 * 60 * 60;
+    }
 }

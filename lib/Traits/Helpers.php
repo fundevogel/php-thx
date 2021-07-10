@@ -67,6 +67,19 @@ Trait Helpers
 
 
     /**
+     * Safe rtrim alternative
+     *
+     * @param string $string
+     * @param string $trim
+     * @return string
+     */
+    public static function rtrim(string $string, string $trim = ' '): string
+    {
+        return preg_replace('!(' . preg_quote($trim) . ')+$!', '', $string);
+    }
+
+
+    /**
      * Arrays
      */
 
