@@ -10,18 +10,10 @@
 namespace S1SYPHOS;
 
 
-use S1SYPHOS\Drivers\Composer;
-use S1SYPHOS\Drivers\Node;
-use S1SYPHOS\Drivers\Yarn;
-
-use S1SYPHOS\Traits\Caching;
-use S1SYPHOS\Traits\Helpers;
-
-
 /**
  * Class Thx
  *
- * Provides relevant data to show some love
+ * Helps to give back & spread the love
  *
  * @package php-thx
  */
@@ -37,42 +29,27 @@ class Thx
      * Traits
      */
 
-    use Caching;
-    use Helpers;
+    use \S1SYPHOS\Traits\Helpers;
 
 
     /**
-     * Properties
-     */
-
-    /**
-     * Selected driver
-     *
-     * @var \S1SYPHOS\Driver
-     */
-    public $driver = null;
-
-
-    /**
-     * Constructor
+     * Gives back & shows some love
      *
      * @param string $dataFile Datafile, eg 'composer.json' or 'package.json'
      * @param string $lockFile Lockfile, eg 'composer.lock', 'package-lock.json' or 'yarn.lock'
-     * @param string $cacheDriver Cache driver
-     * @param array $cacheSettings Cache settings
-     * @return void
+     * @return \S1SYPHOS\Driver
      */
-    public function __construct(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])
+    public static function giveBack(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])
     {
         # Validate lockfile
         $lockFilename = basename($lockFile);
 
         if (
-            !$this->contains($lockFilename, 'composer') &&
-            !$this->contains($lockFilename, 'yarn') &&
-            !$this->contains($lockFilename, 'package')
+            !static::contains($lockFilename, 'composer') &&
+            !static::contains($lockFilename, 'yarn') &&
+            !static::contains($lockFilename, 'package')
         ) {
-            throw new \Exception(sprintf('Lockfile "%s" could not be recognized.', $lockFilename));
+            throw new \Exception(sprintf('Unknown lockfile: "%s".', $lockFilename));
         }
 
         # Determine package manager
@@ -88,7 +65,7 @@ class Thx
                 throw new \Exception(sprintf('%s does not contain "require".', $dataFilename));
             }
 
-            $this->driver = new Composer($pkgData, $lockFile);
+            $class = 'S1SYPHOS\\Drivers\\Composer';
         }
 
         if ($dataFilename === 'package.json') {
@@ -97,53 +74,20 @@ class Thx
             }
 
             # (1) Yarn
-            if ($this->contains($lockFilename, 'yarn')) {
-                $this->driver = new Yarn($pkgData, $lockFile);
+            if (static::contains($lockFilename, 'yarn')) {
+                $class = 'S1SYPHOS\\Drivers\\Yarn';
             }
 
             # (2) NPM
-            if ($this->contains($lockFilename, 'package')) {
-                $this->driver = new Node($pkgData, $lockFile);
+            if (static::contains($lockFilename, 'package')) {
+                $class = 'S1SYPHOS\\Drivers\\Node';
             }
         }
 
-        $this->createCache($cacheDriver, $cacheSettings);
-    }
+        if (!isset($class)) {
+            throw new \Exception(sprintf('Unknown datafile: "%s".', $dataFilename));
+        }
 
-
-    /**
-     * Methods
-     */
-
-    /**
-     * Exports raw package data
-     *
-     * @return array Raw package data
-     */
-    public function data(): array
-    {
-        return $this->driver->data;
-    }
-
-
-    /**
-     * Exports processed package data
-     *
-     * @return array Processed package data
-     */
-    public function pkgs(): array
-    {
-        return $this->driver->pkgs;
-    }
-
-
-    /**
-     * Exports package names
-     *
-     * @return array Package names
-     */
-    public function packages(): array
-    {
-        return $this->driver->packages();
+        return new $class($pkgData, $lockFile, $cacheDriver, $cacheSettings);
     }
 }

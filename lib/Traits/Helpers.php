@@ -3,7 +3,8 @@
 namespace S1SYPHOS\Traits;
 
 
-Trait Helpers {
+Trait Helpers
+{
     /**
      * Strings
      */
@@ -14,7 +15,7 @@ Trait Helpers {
      * @param string $string
      * @return int
      */
-    protected function length(string $string = null): int
+    protected static function length(string $string = null): int
     {
         return mb_strlen($string, 'UTF-8');
     }
@@ -31,7 +32,7 @@ Trait Helpers {
      * @param int $length The min length of values.
      * @return array An array of found values
      */
-    protected function split($string, string $separator = ',', int $length = 1): array
+    protected static function split($string, string $separator = ',', int $length = 1): array
     {
         if (is_array($string) === true) {
             return $string;
@@ -42,7 +43,7 @@ Trait Helpers {
 
         foreach ($parts as $p) {
             $p = trim($p);
-            if ($this->length($p) > 0 && $this->length($p) >= $length) {
+            if (static::length($p) > 0 && static::length($p) >= $length) {
                 $out[] = $p;
             }
         }
@@ -59,7 +60,7 @@ Trait Helpers {
      * @param bool $caseInsensitive
      * @return bool
      */
-    protected function contains(string $string = null, string $needle, bool $caseInsensitive = false): bool
+    protected static function contains(string $string = null, string $needle, bool $caseInsensitive = false): bool
     {
         return call_user_func($caseInsensitive === true ? 'stripos' : 'strpos', $string, $needle) !== false;
     }
@@ -76,7 +77,7 @@ Trait Helpers {
      * @param string $key The key name of the column to extract
      * @return array The result array with all values from that column.
      */
-    protected function pluck(array $array, string $key): array
+    protected static function pluck(array $array, string $key): array
     {
         $output = [];
 
