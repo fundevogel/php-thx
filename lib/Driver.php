@@ -65,9 +65,21 @@ abstract class Driver
      * Required methods
      */
 
+    /**
+     * Extracts raw data from input files
+     *
+     * @param string $dataFile Path to data file
+     * @param string $lockFile Lockfile contents
+     * @return array
+     */
     abstract protected function extract(array $pkgData, string $lockFile): array;
 
 
+    /**
+     * Processes raw data
+     *
+     * @return array Processed data
+     */
     abstract protected function process(): array;
 
 
@@ -76,7 +88,7 @@ abstract class Driver
      */
 
     /**
-     * Provides package names
+     * Exports package names
      *
      * @return array Package names
      */
