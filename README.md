@@ -31,7 +31,7 @@ $pkgFile = 'path/to/composer.json';  # or 'package.json' for NPM / Yarn
 $lockFile = 'path/to/composer.lock'  # or 'package-lock.json' for NPM / 'yarn.lock' for Yarn
 
 try {
-    $obj = new Thx($pkgFile, $lockFile);
+    $obj = Thx::giveBack($pkgFile, $lockFile)->spreadLove();
 
     # Dump package names
     var_dump($obj->packages())
@@ -49,7 +49,7 @@ try {
 ## Roadmap
 
 - [ ] Add (more sophisticated) tests
-- [ ] Gather information using public APIs
+- [x] Gather information using public APIs
 - [ ] Custom `Exception`s
 - [ ] Provide more methods
 - [x] Parse yarn v1 lockfiles
