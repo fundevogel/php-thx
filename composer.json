@@ -3,7 +3,7 @@
     "description": "Acknowledge the people behind your frontend dependencies - and give thanks!",
     "type": "library",
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness"],
     "homepage": "https://github.com/S1SYPHOS",
     "scripts": {
