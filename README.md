@@ -49,7 +49,7 @@ try {
 ## Roadmap
 
 - [ ] Add (more sophisticated) tests
-- [ ] Gather information using public APIs
+- [x] Gather information using public APIs
 - [ ] Custom `Exception`s
 - [ ] Provide more methods
 - [x] Parse yarn v1 lockfiles
