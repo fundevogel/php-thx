@@ -14,6 +14,7 @@ use S1SYPHOS\Drivers\Composer;
 use S1SYPHOS\Drivers\Node;
 use S1SYPHOS\Drivers\Yarn;
 
+use S1SYPHOS\Traits\Caching;
 use S1SYPHOS\Traits\Helpers;
 
 
@@ -36,6 +37,7 @@ class Thx
      * Traits
      */
 
+    use Caching;
     use Helpers;
 
 
@@ -56,9 +58,11 @@ class Thx
      *
      * @param string $dataFile Datafile, eg 'composer.json' or 'package.json'
      * @param string $lockFile Lockfile, eg 'composer.lock', 'package-lock.json' or 'yarn.lock'
+     * @param string $cacheDriver Cache driver
+     * @param array $cacheSettings Cache settings
      * @return void
      */
-    public function __construct(string $dataFile, string $lockFile)
+    public function __construct(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])
     {
         # Validate lockfile
         $lockFilename = basename($lockFile);
@@ -102,6 +106,8 @@ class Thx
                 $this->driver = new Node($pkgData, $lockFile);
             }
         }
+
+        $this->createCache($cacheDriver, $cacheSettings);
     }
 
 
