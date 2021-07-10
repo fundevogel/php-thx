@@ -29,7 +29,7 @@ class Thx
     /**
      * Current version
      */
-    const VERSION = '0.1.0';
+    const VERSION = '0.2.0';
 
 
     /**
@@ -109,9 +109,35 @@ class Thx
      * Methods
      */
 
-
+    /**
+     * Exports raw package data
+     *
+     * @return array Raw package data
+     */
     public function data(): array
     {
         return $this->driver->data;
+    }
+
+
+    /**
+     * Exports processed package data
+     *
+     * @return array Processed package data
+     */
+    public function pkgs(): array
+    {
+        return $this->driver->pkgs;
+    }
+
+
+    /**
+     * Exports package names
+     *
+     * @return array Package names
+     */
+    public function packages(): array
+    {
+        return $this->driver->packages();
     }
 }
