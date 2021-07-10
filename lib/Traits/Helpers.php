@@ -102,4 +102,20 @@ Trait Helpers
 
         return $output;
     }
+
+
+    /**
+     * Miscellaneous
+     */
+
+    /**
+     * Converts days to seconds
+     *
+     * @param int $days
+     * @return int
+     */
+    protected function days2seconds(int $days): int
+    {
+        return $days * 24 * 60 * 60;
+    }
 }
