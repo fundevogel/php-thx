@@ -31,6 +31,10 @@ class Composer extends Driver
 
 
     /**
+     * Methods
+     */
+
+    /**
      * Extracts raw data from input files
      *
      * @param string $dataFile Path to data file

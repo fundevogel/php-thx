@@ -33,6 +33,10 @@ class Thx
 
 
     /**
+     * Methods
+     */
+
+    /**
      * Gives back & shows some love
      *
      * @param string $dataFile Datafile, eg 'composer.json' or 'package.json'
