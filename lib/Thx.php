@@ -109,9 +109,20 @@ class Thx
      * Methods
      */
 
-
     public function data(): array
     {
         return $this->driver->data;
+    }
+
+
+    public function pkgs(): array
+    {
+        return $this->driver->pkgs;
+    }
+
+
+    public function packages(): array
+    {
+        return $this->driver->packages();
     }
 }

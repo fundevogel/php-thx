@@ -28,6 +28,14 @@ abstract class Driver
 
 
     /**
+     * Processed data
+     *
+     * @var array
+     */
+    public $pkgs = null;
+
+
+    /**
      * Operating mode identifier
      *
      * @var string
@@ -44,15 +52,35 @@ abstract class Driver
      */
     public function __construct(array $pkgData, string $lockFile)
     {
-        $this->data = $this->load($pkgData, $lockFile);
+        # Load package data
+        # (1) Extract raw data
+        $this->data = $this->extract($pkgData, $lockFile);
+
+        # (2) Process raw data
+        $this->pkgs = $this->process();
     }
 
 
     /**
-     * Methods
+     * Required methods
      */
 
-    abstract protected function load(array $pkgData, string $lockFile): array;
+    abstract protected function extract(array $pkgData, string $lockFile): array;
 
-    abstract public function packages(): array;
+
+    abstract protected function process(): array;
+
+
+    /**
+     * Shared methods
+     */
+
+    /**
+     * Provides package names
+     *
+     * @return array Package names
+     */
+    public function packages(): array {
+        return $this->pluck($this->pkgs, 'name');
+    }
 }
