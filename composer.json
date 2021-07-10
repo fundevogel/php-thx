@@ -19,7 +19,8 @@
         }
     ],
     "require": {
-        "shieldon/simple-cache": "^1.3"
+        "shieldon/simple-cache": "^1.3",
+        "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
