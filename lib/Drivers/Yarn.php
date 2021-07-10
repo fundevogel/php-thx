@@ -3,22 +3,14 @@
 namespace S1SYPHOS\Drivers;
 
 
-use S1SYPHOS\Driver;
+use S1SYPHOS\Drivers\Node;
 
 
-class Yarn extends Driver
+class Yarn extends Node
 {
     /**
-     * Properties
+     * Methods
      */
-
-    /**
-     * Operating mode identifier
-     *
-     * @var string
-     */
-    public $mode = null;
-
 
     /**
      * Extracts raw data from input files
@@ -68,26 +60,6 @@ class Yarn extends Driver
         return $npmData;
     }
 
-
-    /**
-     * Processes raw data
-     *
-     * @return array Processed data
-     */
-    protected function process(): array
-    {
-        return array_map(function($pkgName, $pkg) {
-            return [
-                'name' => $pkgName,
-                'version' => $pkg['version'],
-            ];
-        }, array_keys($this->data), $this->data);
-    }
-
-
-    /**
-     * Methods
-     */
 
     /**
      * Removes redundant characters from strings
