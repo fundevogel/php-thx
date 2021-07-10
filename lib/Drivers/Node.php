@@ -21,13 +21,13 @@ class Node extends Driver
 
 
     /**
-     * Parses input files
+     * Extracts raw data from input files
      *
      * @param string $dataFile Path to data file
-     * @param string $lockFile Lockfile stream
+     * @param string $lockFile Lockfile contents
      * @return array
      */
-    protected function load(array $pkgData, string $lockFile): array
+    protected function extract(array $pkgData, string $lockFile): array
     {
         $npmData = [];
 
@@ -38,7 +38,7 @@ class Node extends Driver
                 $pkgName = str_replace('node_modules/', '', $pkgName);
 
                 if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
-                    $npmData[$pkgName] = $this->ex($pkg);
+                    $npmData[$pkgName] = $pkg;
                 }
             }
         }
@@ -48,28 +48,17 @@ class Node extends Driver
 
 
     /**
-     * Methods
-     */
-
-    /**
-     * Processes raw data from lockfile
+     * Processes raw data
      *
-     * @return array Extracted packages
+     * @return array Processed data
      */
-    public function packages(): array
+    protected function process(): array
     {
-        return [];
-    }
-
-
-    /**
-     * Processes raw data from lockfile
-     *
-     * @param array $array The array to be processed
-     * @return string The result array
-     */
-    protected function ex(array $array): array
-    {
-        return $array;
+        return array_map(function($pkgName, $pkg) {
+            return [
+                'name' => $pkgName,
+                'version' => $pkg['version'],
+            ];
+        }, array_keys($this->data), $this->data);
     }
 }

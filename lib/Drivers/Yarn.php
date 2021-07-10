@@ -21,13 +21,13 @@ class Yarn extends Driver
 
 
     /**
-     * Parses input files
+     * Extracts raw data from input files
      *
      * @param string $dataFile Path to data file
-     * @param string $lockFile Lockfile stream
+     * @param string $lockFile Lockfile contents
      * @return array
      */
-    protected function load(array $pkgData, string $lockFile): array
+    protected function extract(array $pkgData, string $lockFile): array
     {
         $npmData = [];
 
@@ -44,7 +44,7 @@ class Yarn extends Driver
                 $pkgName = substr($pkgName, 0, strpos($pkgName, '@'));
 
                 if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
-                    $npmData[$pkgName] = $this->ex($pkg);
+                    $npmData[$pkgName] = $pkg;
                 }
             }
 
@@ -59,7 +59,7 @@ class Yarn extends Driver
                     $pkgName = $this->split($pkgName, '@npm')[0];
 
                     if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
-                        $npmData[$pkgName] = $this->ex($pkg);
+                        $npmData[$pkgName] = $pkg;
                     }
                 }
             }
@@ -70,31 +70,24 @@ class Yarn extends Driver
 
 
     /**
+     * Processes raw data
+     *
+     * @return array Processed data
+     */
+    protected function process(): array
+    {
+        return array_map(function($pkgName, $pkg) {
+            return [
+                'name' => $pkgName,
+                'version' => $pkg['version'],
+            ];
+        }, array_keys($this->data), $this->data);
+    }
+
+
+    /**
      * Methods
      */
-
-    /**
-     * Processes raw data from lockfile
-     *
-     * @return array Extracted packages
-     */
-    public function packages(): array
-    {
-        return [];
-    }
-
-
-    /**
-     * Processes raw data from lockfile
-     *
-     * @param array $array The array to be processed
-     * @return string The result array
-     */
-    protected function ex(array $array): array
-    {
-        return $array;
-    }
-
 
     /**
      * Removes redundant characters from strings
