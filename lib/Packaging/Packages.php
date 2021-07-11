@@ -51,4 +51,48 @@ class Packages extends Collection
     public function packages(): array {
         return $this->pluck($this->data, 'name');
     }
+
+
+    /**
+     * Exports licenses
+     *
+     * @return array License names
+     */
+    public function licenses(): array {
+        $data = [];
+
+        foreach ($this->data as $pkg) {
+            $license = !empty($pkg['license']) ? $pkg['license'] : 'unknown';
+
+            if (!isset($data[$license])) {
+                $data[$license] = 0;
+            }
+
+            $data[$license]++;
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * Exports package data sorted by license
+     *
+     * @return array Package names
+     */
+    public function byLicense(): array {
+        $data = [];
+
+        foreach ($this->data as $pkg) {
+            $license = !empty($pkg['license']) ? $pkg['license'] : 'unknown';
+
+            if (!isset($data[$license])) {
+                $data[$license] = [];
+            }
+
+            $data[$license][] = $pkg;
+        }
+
+        return $data;
+    }
 }

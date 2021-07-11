@@ -65,7 +65,7 @@ After setting everything up, `giveBack()` makes some API calls & returns process
 $processed = $obj->giveBack();
 ```
 
-Currently there are three methods you can use:
+At this point, there are three basic methods you can use:
 
 - `data()` returns raw data from lockfile for all used packages
 - `pkgs()` returns processed data for all used packages
@@ -80,6 +80,16 @@ $processed = $obj->giveBack();
 
 # Work with it
 $pkgData = $processed->pkgs();
+```
+
+For convenience, there are methods to
+
+- list licenses & number of occurences: `licenses()`
+- group packages by license: `byLicense()`
+
+```php
+$licenseData = $processed->licenses();
+$groupedByLicense = $processed->byLicense();
 ```
 
 
@@ -127,7 +137,7 @@ try {
 - [x] Custom `Exception`s
 - [x] Move data manipulation to uniform `Packages` class
 - [ ] Provide more (sorting/filtering) methods, eg ..
-    - .. `byLicense()` = 'MIT' => [...], 'GPL v3' => [...] etc
+    - [x] .. `byLicense()` = 'MIT' => [...], 'GPL v3' => [...] etc
     - .. `byDownloads()` = '2k' => [...], '1k' => [...] etc
 
 

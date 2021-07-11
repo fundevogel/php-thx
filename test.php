@@ -44,6 +44,11 @@ if (isset($argv[2])) {
         var_dump($obj->giveBack()->packages());
     }
 
+    if ($argv[2] === 'license') {
+        var_dump($obj->giveBack()->byLicense());
+        var_dump($obj->giveBack()->licenses());
+    }
+
 } else {
     echo sprintf('Invalid data source for "%s", exiting ..%s', $argv[1], "\n");
 }
