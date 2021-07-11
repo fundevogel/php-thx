@@ -24,7 +24,7 @@ class Packages extends Collection
      */
     public function __construct(array $data)
     {
-        $this->data = $data;
+        $this->data = static::sort($data, 'name', 'asc');
     }
 
 
