@@ -90,14 +90,6 @@ class Node extends Driver
                 $data['license'] = $response->license ?? '';
                 $data['description'] = $response->description;
                 $data['url'] = $response->links->repository;
-                $data['forked'] = false;
-
-                # Check if it's a forked repository
-                if (preg_match('/(([0-9])+(\.{0,1}([0-9]))*)/', $data['version']) == false) {
-                    # TODO: Check if that's even a thing
-                    # $data['version'] = $data->version;
-                    $data['forked'] = true;
-                }
 
                 # Cache result
                 $cache->set($hash, $data, $this->days2seconds($config['cacheDuration']));
