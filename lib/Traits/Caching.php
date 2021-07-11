@@ -2,6 +2,9 @@
 
 namespace S1SYPHOS\Traits;
 
+use S1SYPHOS\Exceptions\NoJuiceException;
+use S1SYPHOS\Exceptions\NoMannersException;
+
 
 trait Caching
 {
@@ -86,7 +89,7 @@ trait Caching
         # Initialize cache
         # (1) Validate provided cache driver
         if (in_array($cacheDriver, $this->cacheDrivers) === false) {
-            throw new \Exception(sprintf('Cache driver "%s" cannot be initiated', $cacheDriver));
+            throw new NoJuiceException(sprintf('Cache driver "%s" cannot be initiated', $cacheDriver));
         }
 
         # (2) Merge caching options with defaults
@@ -134,7 +137,7 @@ trait Caching
         }
 
         if (is_writable($parent) === false) {
-            throw new \Exception(sprintf('The directory "%s" cannot be created', $dir));
+            throw new NoMannersException(sprintf('The directory "%s" cannot be created', $dir));
         }
 
         return mkdir($dir);

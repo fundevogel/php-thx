@@ -50,7 +50,7 @@ try {
 
 - [ ] Add (more sophisticated) tests
 - [x] Gather information using public APIs
-- [ ] Custom `Exception`s
+- [x] Custom `Exception`s
 - [ ] Provide more methods
 - [x] Parse yarn v1 lockfiles
 

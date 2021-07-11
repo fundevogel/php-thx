@@ -9,6 +9,9 @@
 
 namespace S1SYPHOS;
 
+use S1SYPHOS\Exceptions\NoJuiceException;
+use S1SYPHOS\Exceptions\NoMannersException;
+
 
 /**
  * Class Thx
@@ -53,7 +56,7 @@ class Thx
             !static::contains($lockFilename, 'yarn') &&
             !static::contains($lockFilename, 'package')
         ) {
-            throw new \Exception(sprintf('Unknown lockfile: "%s".', $lockFilename));
+            throw new NoMannersException(sprintf('Unknown lockfile: "%s".', $lockFilename));
         }
 
         # Determine package manager
@@ -66,7 +69,7 @@ class Thx
 
         if ($dataFilename === 'composer.json') {
             if (in_array('require', array_keys($pkgData)) === false) {
-                throw new \Exception(sprintf('%s does not contain "require".', $dataFilename));
+                throw new NoJuiceException(sprintf('%s does not contain "require".', $dataFilename));
             }
 
             $class = 'S1SYPHOS\\Drivers\\Composer';
@@ -74,7 +77,7 @@ class Thx
 
         if ($dataFilename === 'package.json') {
             if (in_array('dependencies', array_keys($pkgData)) === false) {
-                throw new \Exception(sprintf('%s does not contain "dependencies".', $dataFilename));
+                throw new NoJuiceException(sprintf('%s does not contain "dependencies".', $dataFilename));
             }
 
             # (1) Yarn
@@ -89,7 +92,7 @@ class Thx
         }
 
         if (!isset($class)) {
-            throw new \Exception(sprintf('Unknown datafile: "%s".', $dataFilename));
+            throw new NoMannersException(sprintf('Unknown datafile: "%s".', $dataFilename));
         }
 
         return new $class($pkgData, $lockFile, $cacheDriver, $cacheSettings);
