@@ -75,7 +75,7 @@ class Thx
      * Setters & getters
      */
 
-    public function setBlockList(int $blockList): void
+    public function setBlockList(array $blockList): void
     {
         $this->blockList = $blockList;
     }
