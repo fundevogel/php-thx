@@ -3,9 +3,7 @@
 namespace S1SYPHOS;
 
 
-use S1SYPHOS\Traits\Caching;
 use S1SYPHOS\Traits\Helpers;
-use S1SYPHOS\Traits\Remote;
 
 
 abstract class Driver
@@ -14,9 +12,7 @@ abstract class Driver
      * Traits
      */
 
-    use Caching;
     use Helpers;
-    use Remote;
 
 
     /**
@@ -32,27 +28,11 @@ abstract class Driver
 
 
     /**
-     * Processed data
-     *
-     * @var array
-     */
-    public $pkgs = null;
-
-
-    /**
      * Operating mode identifier
      *
      * @var string
      */
     public $mode;
-
-
-    /**
-     * List of packages not to be processed
-     *
-     * @var array
-     */
-    public $blockList = [];
 
 
     /**
@@ -64,29 +44,10 @@ abstract class Driver
      * @param array $cacheSettings Cache settings
      * @return void
      */
-    public function __construct(array $pkgData, string $lockFile, string $cacheDriver, array $cacheSettings)
+    public function __construct(array $pkgData, string $lockFile)
     {
-        # Create cache instance
-        $this->createCache($cacheDriver, $cacheSettings);
-
         # Extract raw data
         $this->data = $this->extract($pkgData, $lockFile);
-    }
-
-
-    /**
-     * Setters & getters
-     */
-
-    public function setBlockList(int $blockList): void
-    {
-        $this->blockList = $blockList;
-    }
-
-
-    public function getBlockList(): array
-    {
-        return $this->blockList;
     }
 
 
@@ -97,47 +58,34 @@ abstract class Driver
     /**
      * Spreads love
      *
-     * @return \S1SYPHOS\Driver
+     * @param \Shieldon\SimpleCache\Cache $cache Cache object
+     * @param array $config Configuration options
+     * @return \S1SYPHOS\Packaging\Packages Processed data
      */
-    public function spreadLove(): \S1SYPHOS\Driver
+    public function spreadLove(\Shieldon\SimpleCache\Cache $cache, array $config): \S1SYPHOS\Packaging\Packages
     {
         # Process raw data
-        $this->pkgs = $this->process();
-
-        # Enable chaining
-        return $this;
+        return $this->process($cache, $config);
     }
 
 
-    /**
-     * Exports raw package data
-     *
-     * @return array Raw package data
-     */
-    public function data(): array
+    protected function fetchRemote(string $apiURL, int $timeout = 3, string $userAgent = ''): string
     {
-        return $this->data;
-    }
+        # Initialize HTTP client
+        $client = new \GuzzleHttp\Client(['timeout'  => $timeout]);
 
+        try {
+            $response = $client->get($apiURL, ['headers' => ['User-Agent' => $userAgent]]);
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
+            return '';
+        }
 
-    /**
-     * Exports processed package data
-     *
-     * @return array Processed package data
-     */
-    public function pkgs(): array
-    {
-        return $this->pkgs;
-    }
+        if ($response->getStatusCode() === 200) {
+            return $response->getBody();
+        }
 
-
-    /**
-     * Exports package names
-     *
-     * @return array Package names
-     */
-    public function packages(): array {
-        return $this->pluck($this->pkgs, 'name');
+        # (3) .. otherwise, transmission *may* have worked
+        return '';
     }
 
 
@@ -150,7 +98,7 @@ abstract class Driver
      *
      * @param string $dataFile Path to data file
      * @param string $lockFile Lockfile contents
-     * @return array
+     * @return array Extracted data
      */
     abstract protected function extract(array $pkgData, string $lockFile): array;
 
@@ -158,7 +106,9 @@ abstract class Driver
     /**
      * Processes raw data
      *
-     * @return array Processed data
+     * @param \Shieldon\SimpleCache\Cache $cache Cache object
+     * @param array $config Configuration options
+     * @return \S1SYPHOS\Packaging\Packages Processed data
      */
-    abstract protected function process(): array;
+    abstract protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \S1SYPHOS\Packaging\Packages;
 }
