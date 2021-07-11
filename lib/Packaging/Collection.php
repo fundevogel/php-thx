@@ -18,13 +18,6 @@ class Collection implements Countable, Iterator
 
 
     /**
-     * Properties
-     */
-
-    protected $index = 0;
-
-
-    /**
      * Methods
      */
 

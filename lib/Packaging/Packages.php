@@ -14,13 +14,13 @@ class Packages extends Collection
      *
      * @var array
      */
-    public $data = null;
+    protected $data;
 
 
     /**
      * Constructor
      *
-     * @param array $pkgs Processed data
+     * @param array $data Processed data
      */
     public function __construct(array $data)
     {
