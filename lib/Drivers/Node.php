@@ -85,6 +85,12 @@ class Node extends Driver
                 # Fetch additional information from https://api.npms.io
                 $apiURL = 'https://api.npms.io/v2/package/' . rawurlencode($pkgName);
                 $response = $this->fetchRemote($apiURL, $config['timeout'], $config['userAgent']);
+
+                # Skip processing if connection is faulty
+                if (empty($response)) {
+                    return $data;
+                }
+
                 $response = json_decode($response)->collected->metadata;
 
                 $data['license'] = $response->license ?? '';
