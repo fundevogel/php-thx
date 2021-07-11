@@ -12,7 +12,8 @@ namespace S1SYPHOS;
 use S1SYPHOS\Exceptions\NoJuiceException;
 use S1SYPHOS\Exceptions\NoMannersException;
 
-use \S1SYPHOS\Traits\Helpers;
+use S1SYPHOS\Traits\Helpers;
+use S1SYPHOS\Traits\Caching;
 
 
 /**
@@ -27,33 +28,105 @@ class Thx
     /**
      * Current version
      */
-    const VERSION = '1.0.0';
+    const VERSION = '1.1.0';
 
 
     /**
      * Traits
      */
 
+    use Caching;
     use Helpers;
 
 
     /**
-     * Methods
+     * List of packages not to be processed
+     *
+     * @var array
      */
+    public $blockList = [];
+
 
     /**
-     * Gives back & shows some love
+     * Current package driver
+     *
+     * @var \S1SYPHOS\Driver
+     */
+    public $driver;
+
+
+    /**
+     * Defines timeout for API requests (in seconds)
+     *
+     * @var int
+     */
+    protected $timeout = 3;
+
+
+    /**
+     * Controls `User-Agent` header
+     *
+     * @var string
+     */
+    protected $userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0';
+
+
+    /**
+     * Setters & getters
+     */
+
+    public function setBlockList(int $blockList): void
+    {
+        $this->blockList = $blockList;
+    }
+
+
+    public function getBlockList(): array
+    {
+        return $this->blockList;
+    }
+
+
+    public function setTimeout(int $timeout): void
+    {
+        $this->timeout = $timeout;
+    }
+
+
+    public function getTimeout(): string
+    {
+        return $this->timeout;
+    }
+
+
+    public function setUserAgent(string $userAgent): void
+    {
+        $this->userAgent = $userAgent;
+    }
+
+
+    public function getUserAgent(): string
+    {
+        return $this->userAgent;
+    }
+
+
+    /**
+     * Constructor
      *
      * @param string $dataFile Path to datafile, eg 'composer.json' or 'package.json'
      * @param string $lockFile Path tp lockfile, eg 'composer.lock', 'package-lock.json' or 'yarn.lock'
      * @param string $cacheDriver Cache driver
      * @param array $cacheSettings Cache settings
-
-     * @return \S1SYPHOS\Driver
+     * @return void
      */
-    public static function giveBack(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])
+    public function __construct(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])
     {
-        # Validate lockfile
+        # Create cache instance
+        $this->cache = $this->createCache($cacheDriver, $cacheSettings);
+
+        # Select appropriate driver for files
+        # (1) Validate lockfile
         $lockFilename = basename($lockFile);
 
         if (
@@ -64,12 +137,13 @@ class Thx
             throw new NoMannersException(sprintf('Unknown lockfile: "%s".', $lockFilename));
         }
 
-        # Determine package manager
+        # (2) Determine package manager by ..
         $lockFile = @file_get_contents($lockFile);
 
-        # Load package data
+        # .. loading package data
         $pkgData = json_decode(file_get_contents($dataFile), true);
 
+        # .. matching filenames
         $dataFilename = basename($dataFile);
 
         if ($dataFilename === 'composer.json') {
@@ -96,10 +170,45 @@ class Thx
             }
         }
 
+        # (3) Validate datafile
         if (!isset($class)) {
             throw new NoMannersException(sprintf('Unknown datafile: "%s".', $dataFilename));
         }
 
-        return new $class($pkgData, $lockFile, $cacheDriver, $cacheSettings);
+        # (4) Instantiate appropriate class
+        $this->driver = new $class($pkgData, $lockFile);
+    }
+
+
+    /**
+     * Methods
+     */
+
+    /**
+     * Exports raw data
+     *
+     * @return array
+     */
+    public function data(): array
+    {
+        return $this->driver->data;
+    }
+
+
+    /**
+     * Gives back & shares the love
+     *
+     * @return \S1SYPHOS\Packaging\Packages Processed data
+     */
+    public function giveBack()
+    {
+        $config = [
+            'bockList' => $this->blockList,
+            'cacheDuration' => $this->cacheDuration,
+            'timeout' => $this->timeout,
+            'userAgent' => $this->userAgent,
+        ];
+
+        return $this->driver->spreadLove($this->cache, $config);
     }
 }

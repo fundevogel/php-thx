@@ -21,7 +21,7 @@ class Yarn extends Node
      */
     protected function extract(array $pkgData, string $lockFile): array
     {
-        $npmData = [];
+        $data = [];
 
         # Distinguish versions
         $v1 = '# yarn lockfile v1';
@@ -36,7 +36,7 @@ class Yarn extends Node
                 $pkgName = substr($pkgName, 0, strpos($pkgName, '@'));
 
                 if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
-                    $npmData[$pkgName] = $pkg;
+                    $data[$pkgName] = $pkg;
                 }
             }
 
@@ -51,13 +51,13 @@ class Yarn extends Node
                     $pkgName = $this->split($pkgName, '@npm')[0];
 
                     if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
-                        $npmData[$pkgName] = $pkg;
+                        $data[$pkgName] = $pkg;
                     }
                 }
             }
         }
 
-        return $npmData;
+        return $data;
     }
 
 

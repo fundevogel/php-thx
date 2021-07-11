@@ -101,13 +101,15 @@ trait Caching
         }
 
         # (4) Initialize new cache instance
-        $this->cache = new \Shieldon\SimpleCache\Cache($cacheDriver, $cacheSettings);
+        $cache = new \Shieldon\SimpleCache\Cache($cacheDriver, $cacheSettings);
 
         # (5) Build database if using SQLite for the first time
         # TODO: Add check for MySQL, see https://github.com/terrylinooo/simple-cache/issues/8
         if ($cacheDriver === 'sqlite' && !file_exists(join([$cacheSettings['storage'], 'cache.sqlite3']))) {
             $cache->rebuild();
         }
+
+        return $cache;
     }
 
 
