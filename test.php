@@ -44,7 +44,7 @@ if (isset($argv[2])) {
         var_dump($obj->giveBack()->packages());
     }
 
-    if ($argv[2] === 'license') {
+    if ($argv[2] === 'license' || $argv[2] === 'licenses') {
         var_dump($obj->giveBack()->byLicense());
         var_dump($obj->giveBack()->licenses());
     }

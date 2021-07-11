@@ -93,9 +93,16 @@ class Node extends Driver
 
                 $response = json_decode($response)->collected->metadata;
 
+                # Split URL & set pointer to last entry
+                $repoURL = $response->links->repository;
+
+                $splitList = static::split($repoURL, '/');
+                end($splitList);
+
+                $data['maintainer'] = prev($splitList);
                 $data['license'] = $response->license ?? '';
                 $data['description'] = $response->description;
-                $data['url'] = $response->links->repository;
+                $data['url'] = $repoURL;
 
                 # Cache result
                 $cache->set($hash, $data, $this->days2seconds($config['cacheDuration']));
