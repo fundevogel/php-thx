@@ -105,6 +105,42 @@ Trait Helpers
 
 
     /**
+     * Sorts a multi-dimensional array by a certain column
+     *
+     * @param array $array The source array
+     * @param string $field The name of the column
+     * @param string $direction desc (descending) or asc (ascending)
+     * @param int $method A PHP sort method flag or 'natural' for natural sorting, which is not supported in PHP by sort flags
+     * @return array The sorted array
+     */
+    protected static function sort(array $array, string $field, string $direction = 'desc', $method = SORT_REGULAR): array
+    {
+        $direction = strtolower($direction) === 'desc' ? SORT_DESC : SORT_ASC;
+        $helper    = [];
+        $result    = [];
+
+        // build the helper array
+        foreach ($array as $key => $row) {
+            $helper[$key] = $row[$field];
+        }
+
+        // natural sorting
+        if ($direction === SORT_DESC) {
+            arsort($helper, $method);
+        } else {
+            asort($helper, $method);
+        }
+
+        // rebuild the original array
+        foreach ($helper as $key => $val) {
+            $result[$key] = $array[$key];
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Miscellaneous
      */
 

@@ -69,22 +69,33 @@ abstract class Driver
     }
 
 
+    /**
+     * Fetches information from API endpoint
+     *
+     * @param string $apiURL API endpoint
+     * @param int $timeout Request timeout in seconds
+     * @param string $userAgent User-Agent header
+     * @return string Response text - empty if connection failed
+     */
     protected function fetchRemote(string $apiURL, int $timeout = 3, string $userAgent = ''): string
     {
         # Initialize HTTP client
         $client = new \GuzzleHttp\Client(['timeout'  => $timeout]);
 
         try {
+            # Fetch data from API
+            # (1) Send GET request
             $response = $client->get($apiURL, ['headers' => ['User-Agent' => $userAgent]]);
-        } catch (\GuzzleHttp\Exception\TransferException $e) {
-            return '';
-        }
 
-        if ($response->getStatusCode() === 200) {
-            return $response->getBody();
-        }
+            # (2) If successful ..
+            if ($response->getStatusCode() === 200) {
+                # .. save response
+                return $response->getBody();
+            }
 
-        # (3) .. otherwise, transmission *may* have worked
+        # .. otherwise, return empty text
+        } catch (\GuzzleHttp\Exception\TransferException $e) {}
+
         return '';
     }
 

@@ -13,6 +13,14 @@ trait Caching
      */
 
     /**
+     * Cache driver
+     *
+     * @var \Shieldon\SimpleCache\Cache
+     */
+    public $cache;
+
+
+    /**
      * Holds tokens of all possible cache drivers
      *
      * See https://github.com/terrylinooo/simple-cache
@@ -34,27 +42,11 @@ trait Caching
 
 
     /**
-     * Cache driver
-     *
-     * @var \Psr\SimpleCache\CacheInterface
-     */
-    protected $cache;
-
-
-    /**
      * Defines cache duration (in days)
      *
      * @var int
      */
-    protected $cacheDuration = 2;
-
-
-    /**
-     * Determines whether output was fetched from cache
-     *
-     * @var bool
-     */
-    public $fromCache = false;
+    protected $cacheDuration = 7;
 
 
     /**
