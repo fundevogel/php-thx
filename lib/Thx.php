@@ -28,7 +28,7 @@ class Thx
     /**
      * Current version
      */
-    const VERSION = '1.1.0';
+    const VERSION = '1.1.1';
 
 
     /**
@@ -75,7 +75,7 @@ class Thx
      * Setters & getters
      */
 
-    public function setBlockList(int $blockList): void
+    public function setBlockList(array $blockList): void
     {
         $this->blockList = $blockList;
     }
@@ -203,7 +203,7 @@ class Thx
     public function giveBack()
     {
         $config = [
-            'bockList' => $this->blockList,
+            'blockList' => $this->blockList,
             'cacheDuration' => $this->cacheDuration,
             'timeout' => $this->timeout,
             'userAgent' => $this->userAgent,
