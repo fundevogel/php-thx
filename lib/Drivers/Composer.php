@@ -62,14 +62,10 @@ class Composer extends Driver
             # Build unique caching key
             $hash = md5($pkgName);
 
-            # Determine whether data was stored in cache
-            $fromCache = false;
-
             # Fetch information about package ..
             if ($cache->has($hash)) {
                 # (1) .. from cache (if available)
                 $data = $cache->get($hash);
-                $fromCache = true;
             }
 
             if (empty($data)) {
@@ -85,7 +81,7 @@ class Composer extends Driver
                 $apiURL = 'https://repo.packagist.org/p/' . $pkgName . '.json';
                 $response = $this->fetchRemote($apiURL, $config['timeout'], $config['userAgent']);
 
-                # Skip processing if connection is faulty
+                # Skip processing if connection failed
                 if (empty($response)) {
                     return $data;
                 }

@@ -44,7 +44,7 @@ class Thx
      *
      * @var array
      */
-    public $blockList = [];
+    protected $blockList = [];
 
 
     /**
