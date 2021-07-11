@@ -63,19 +63,26 @@ class Composer extends Driver
             $hash = md5($pkgName);
 
             # Fetch information about package ..
+            # (1) .. from cache (if available)
             if ($cache->has($hash)) {
-                # (1) .. from cache (if available)
                 $data = $cache->get($hash);
             }
 
+            # (2) .. from API (if not)
             if (empty($data)) {
-                # (2) .. from API
                 # Block unwanted libraries
                 if (in_array($pkgName, $config['blockList']) === true) return false;
 
-                # Prepare data for each repository
-                $data['name'] = $pkgName;
+                # Prepare data for each repository by determining ..
+                # (1) .. name of repository
+                $splitList = static::split($pkgName, '/');
+                $data['name'] = $splitList[1];
+
+                # (2) .. exact version
                 $data['version'] = str_replace('v', '', strtolower($pkg['version']));
+
+                # (3) .. maintainer
+                $data['maintainer'] = $splitList[0];
 
                 # Fetch additional information from https://packagist.org
                 $apiURL = 'https://repo.packagist.org/p/' . $pkgName . '.json';
