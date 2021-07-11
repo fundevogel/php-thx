@@ -58,8 +58,8 @@ abstract class Driver
     /**
      * Constructor
      *
-     * @param string $dataFile Path to data file
-     * @param string $lockFile Lockfile stream
+     * @param string $pkgData Content of datafile as array
+     * @param string $lockFile Content of lockfile as string
      * @param string $cacheDriver Cache driver
      * @param array $cacheSettings Cache settings
      * @return void

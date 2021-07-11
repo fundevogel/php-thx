@@ -12,6 +12,8 @@ namespace S1SYPHOS;
 use S1SYPHOS\Exceptions\NoJuiceException;
 use S1SYPHOS\Exceptions\NoMannersException;
 
+use \S1SYPHOS\Traits\Helpers;
+
 
 /**
  * Class Thx
@@ -32,7 +34,7 @@ class Thx
      * Traits
      */
 
-    use \S1SYPHOS\Traits\Helpers;
+    use Helpers;
 
 
     /**
@@ -42,8 +44,11 @@ class Thx
     /**
      * Gives back & shows some love
      *
-     * @param string $dataFile Datafile, eg 'composer.json' or 'package.json'
-     * @param string $lockFile Lockfile, eg 'composer.lock', 'package-lock.json' or 'yarn.lock'
+     * @param string $dataFile Path to datafile, eg 'composer.json' or 'package.json'
+     * @param string $lockFile Path tp lockfile, eg 'composer.lock', 'package-lock.json' or 'yarn.lock'
+     * @param string $cacheDriver Cache driver
+     * @param array $cacheSettings Cache settings
+
      * @return \S1SYPHOS\Driver
      */
     public static function giveBack(string $dataFile, string $lockFile, string $cacheDriver = 'file', array $cacheSettings = [])

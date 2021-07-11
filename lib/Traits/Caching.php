@@ -9,7 +9,7 @@ use S1SYPHOS\Exceptions\NoMannersException;
 trait Caching
 {
     /**
-     * Caching
+     * Properties
      */
 
     /**
