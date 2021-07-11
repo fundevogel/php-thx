@@ -84,6 +84,12 @@ class Composer extends Driver
                 # Fetch additional information from https://packagist.org
                 $apiURL = 'https://repo.packagist.org/p/' . $pkgName . '.json';
                 $response = $this->fetchRemote($apiURL, $config['timeout'], $config['userAgent']);
+
+                # Skip processing if connection is faulty
+                if (empty($response)) {
+                    return $data;
+                }
+
                 $response = json_decode($response, true)['packages'][$pkgName];
 
                 # Enrich data with results
