@@ -65,7 +65,7 @@ class Node extends Driver
             $data = [];
 
             # Build unique caching key
-            $hash = md5($pkgName);
+            $hash = md5($pkgName . $pkg['version']);
 
             # Fetch information about package ..
             if ($cache->has($hash)) {
