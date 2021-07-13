@@ -60,7 +60,7 @@ class Composer extends Driver
             $data = [];
 
             # Build unique caching key
-            $hash = md5($pkgName);
+            $hash = md5($pkgName . $pkg['version']);
 
             # Fetch information about package ..
             # (1) .. from cache (if available)
