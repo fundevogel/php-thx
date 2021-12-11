@@ -1,9 +1,9 @@
 <?php
 
-namespace S1SYPHOS\Traits;
+namespace Fundevogel\Thx\Traits;
 
-use S1SYPHOS\Exceptions\NoJuiceException;
-use S1SYPHOS\Exceptions\NoMannersException;
+use Fundevogel\Thx\Exceptions\NoJuiceException;
+use Fundevogel\Thx\Exceptions\NoMannersException;
 
 
 trait Caching

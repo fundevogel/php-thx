@@ -1,9 +1,9 @@
 <?php
 
-namespace S1SYPHOS\Drivers;
+namespace Fundevogel\Thx\Drivers;
 
 
-use S1SYPHOS\Drivers\Node;
+use Fundevogel\Thx\Drivers\Node;
 
 
 class Yarn extends Node

@@ -1,11 +1,11 @@
 <?php
 
-namespace S1SYPHOS\Packaging;
+namespace Fundevogel\Thx\Packaging;
 
 use Countable;
 use Iterator;
 
-use S1SYPHOS\Traits\Helpers;
+use Fundevogel\Thx\Traits\Helpers;
 
 
 class Collection implements Countable, Iterator
@@ -43,7 +43,7 @@ class Collection implements Countable, Iterator
     /**
      * Returns the current object
      *
-     * @return \S1SYPHOS\Package
+     * @return \Fundevogel\Thx\Package
      */
     public function current()
     {
@@ -65,7 +65,7 @@ class Collection implements Countable, Iterator
     /**
      * Moves the cursor to the next object and returns it
      *
-     * @return \S1SYPHOS\Package
+     * @return \Fundevogel\Thx\Package
      */
     public function next()
     {
@@ -76,7 +76,7 @@ class Collection implements Countable, Iterator
     /**
      * Moves the cursor to the previous object and returns it
      *
-     * @return \S1SYPHOS\Package
+     * @return \Fundevogel\Thx\Package
      */
     public function prev()
     {

@@ -1,11 +1,11 @@
 {
-    "name": "s1syphos/php-thx",
+    "name": "fundevogel/php-thx",
     "description": "Acknowledge the people behind your frontend dependencies - and give thanks!",
     "type": "library",
     "license": "MIT",
     "version": "1.2.1",
     "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness"],
-    "homepage": "https://github.com/S1SYPHOS",
+    "homepage": "https://github.com/Fundevogel",
     "scripts": {
         "cs-dry": "php-cs-fixer fix --dry-run --diff",
         "cs-fix": "php-cs-fixer fix",
@@ -13,9 +13,16 @@
     },
     "authors": [
         {
-            "name": "Martin Folkers",
-            "homepage": "https://twobrain.io",
+            "name": "Kinder- und Jugendbuchhandlung Fundevogel",
+            "email": "maschinenraum@fundevogel.de",
+            "homepage": "https://fundevogel.de",
             "role": "Maintainer"
+        },
+        {
+            "name": "Martin Folkers",
+            "email": "hello@twobrain.io",
+            "homepage": "https://twobrain.io",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -28,12 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "S1SYPHOS\\": "lib/"
+            "Fundevogel\\Thx\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "S1SYPHOS\\Tests\\": "tests/"
+            "Fundevogel\\Thx\\Tests\\": "tests/"
         }
     }
 }

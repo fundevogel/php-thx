@@ -5,19 +5,19 @@ require_once('vendor/autoload.php');
 
 if (isset($argv[1])) {
     if ($argv[1] === 'composer') {
-        $obj = new S1SYPHOS\Thx('tests/composer/composer.json', 'tests/composer/composer.lock');
+        $obj = new Fundevogel\Thx\Thx('tests/composer/composer.json', 'tests/composer/composer.lock');
     }
 
     if ($argv[1] === 'yarn1') {
-        $obj = new S1SYPHOS\Thx('tests/yarn-v1/package.json', 'tests/yarn-v1/yarn.lock');
+        $obj = new Fundevogel\Thx\Thx('tests/yarn-v1/package.json', 'tests/yarn-v1/yarn.lock');
     }
 
     if ($argv[1] === 'yarn2') {
-        $obj = new S1SYPHOS\Thx('tests/yarn-v2/package.json', 'tests/yarn-v2/yarn.lock');
+        $obj = new Fundevogel\Thx\Thx('tests/yarn-v2/package.json', 'tests/yarn-v2/yarn.lock');
     }
 
     if ($argv[1] === 'npm') {
-        $obj = new S1SYPHOS\Thx('tests/npm/package.json', 'tests/npm/package-lock.json');
+        $obj = new Fundevogel\Thx\Thx('tests/npm/package.json', 'tests/npm/package-lock.json');
     }
 }
 

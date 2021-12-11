@@ -1,9 +1,9 @@
 <?php
 
-namespace S1SYPHOS\Drivers;
+namespace Fundevogel\Thx\Drivers;
 
-use S1SYPHOS\Driver;
-use S1SYPHOS\Packaging\Packages;
+use Fundevogel\Thx\Driver;
+use Fundevogel\Thx\Packaging\Packages;
 
 
 class Composer extends Driver
@@ -52,9 +52,9 @@ class Composer extends Driver
      *
      * @param \Shieldon\SimpleCache\Cache $cache Cache object
      * @param array $config Configuration options
-     * @return \S1SYPHOS\Packaging\Packages Processed data
+     * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \S1SYPHOS\Packaging\Packages
+    protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages
     {
         $pkgs = array_map(function($pkgName, $pkg) use ($cache, $config) {
             $data = [];
