@@ -1,5 +1,5 @@
 <?php
 
-namespace S1SYPHOS\Exceptions;
+namespace Fundevogel\Thx\Exceptions;
 
 class NoThxException extends \Exception {}

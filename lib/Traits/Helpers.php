@@ -1,6 +1,6 @@
 <?php
 
-namespace S1SYPHOS\Traits;
+namespace Fundevogel\Thx\Traits;
 
 
 Trait Helpers

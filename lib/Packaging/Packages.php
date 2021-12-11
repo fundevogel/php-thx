@@ -1,6 +1,6 @@
 <?php
 
-namespace S1SYPHOS\Packaging;
+namespace Fundevogel\Thx\Packaging;
 
 
 class Packages extends Collection

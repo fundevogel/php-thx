@@ -1,5 +1,5 @@
 # php-thx
-[![Release](https://img.shields.io/github/release/S1SYPHOS/php-thx.svg)](https://github.com/S1SYPHOS/php-thx/releases) [![License](https://img.shields.io/github/license/S1SYPHOS/php-thx.svg)](https://github.com/S1SYPHOS/php-thx/blob/main/LICENSE) [![Issues](https://img.shields.io/github/issues/S1SYPHOS/php-thx.svg)](https://github.com/S1SYPHOS/php-thx/issues) [![Status](https://travis-ci.org/S1SYPHOS/php-thx.svg?branch=main)](https://travis-ci.org/S1SYPHOS/php-thx)
+[![Release](https://img.shields.io/github/release/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/releases) [![License](https://img.shields.io/github/license/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/blob/main/LICENSE) [![Issues](https://img.shields.io/github/issues/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/issues) [![Status](https://travis-ci.org/Fundevogel/php-thx.svg?branch=main)](https://travis-ci.org/Fundevogel/php-thx)
 
 A very simple PHP library for acknowledging the people behind your frontend dependencies - and giving thanks.
 
@@ -9,7 +9,7 @@ A very simple PHP library for acknowledging the people behind your frontend depe
 Install this package with [Composer](https://getcomposer.org):
 
 ```text
-composer require S1SYPHOS/php-thx
+composer require Fundevogel/php-thx
 ```
 
 **Note:**
@@ -25,7 +25,7 @@ First, determine the paths to your files (datafile & lockfile, see below):
 
 require_once('vendor/autoload.php');
 
-use S1SYPHOS\Thx;
+use Fundevogel\Thx;
 
 $pkgFile = 'path/to/composer.json';                # or 'package.json' for NPM / Yarn
 $lockFile = 'path/to/composer.lock'                # or 'package-lock.json' for NPM / 'yarn.lock' for Yarn
@@ -102,7 +102,7 @@ This example should get you started:
 
 require_once('vendor/autoload.php');
 
-use S1SYPHOS\Thx;
+use Fundevogel\Thx;
 
 $pkgFile = 'path/to/composer.json';  # or 'package.json' for NPM / Yarn
 $lockFile = 'path/to/composer.lock'  # or 'package-lock.json' for NPM / 'yarn.lock' for Yarn

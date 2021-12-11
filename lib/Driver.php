@@ -1,9 +1,9 @@
 <?php
 
-namespace S1SYPHOS;
+namespace Fundevogel\Thx;
 
 
-use S1SYPHOS\Traits\Helpers;
+use Fundevogel\Thx\Traits\Helpers;
 
 
 abstract class Driver
@@ -60,9 +60,9 @@ abstract class Driver
      *
      * @param \Shieldon\SimpleCache\Cache $cache Cache object
      * @param array $config Configuration options
-     * @return \S1SYPHOS\Packaging\Packages Processed data
+     * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    public function spreadLove(\Shieldon\SimpleCache\Cache $cache, array $config): \S1SYPHOS\Packaging\Packages
+    public function spreadLove(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages
     {
         # Process raw data
         return $this->process($cache, $config);
@@ -119,7 +119,7 @@ abstract class Driver
      *
      * @param \Shieldon\SimpleCache\Cache $cache Cache object
      * @param array $config Configuration options
-     * @return \S1SYPHOS\Packaging\Packages Processed data
+     * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    abstract protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \S1SYPHOS\Packaging\Packages;
+    abstract protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages;
 }

@@ -3,17 +3,17 @@
 /**
  * Thx - Acknowledge the people behind your frontend dependencies - and give thanks!
  *
- * @link https://github.com/S1SYPHOS/php-thx
+ * @link https://github.com/Fundevogel/php-thx
  * @license https://opensource.org/licenses/MIT MIT
  */
 
-namespace S1SYPHOS;
+namespace Fundevogel\Thx;
 
-use S1SYPHOS\Exceptions\NoJuiceException;
-use S1SYPHOS\Exceptions\NoMannersException;
+use Fundevogel\Thx\Exceptions\NoJuiceException;
+use Fundevogel\Thx\Exceptions\NoMannersException;
 
-use S1SYPHOS\Traits\Helpers;
-use S1SYPHOS\Traits\Caching;
+use Fundevogel\Thx\Traits\Helpers;
+use Fundevogel\Thx\Traits\Caching;
 
 
 /**
@@ -50,7 +50,7 @@ class Thx
     /**
      * Current package driver
      *
-     * @var \S1SYPHOS\Driver
+     * @var \Fundevogel\Thx\Driver
      */
     public $driver;
 
@@ -151,7 +151,7 @@ class Thx
                 throw new NoJuiceException(sprintf('%s does not contain "require".', $dataFilename));
             }
 
-            $class = 'S1SYPHOS\\Drivers\\Composer';
+            $class = 'Fundevogel\\Thx\\Drivers\\Composer';
         }
 
         if ($dataFilename === 'package.json') {
@@ -161,12 +161,12 @@ class Thx
 
             # (1) Yarn
             if (static::contains($lockFilename, 'yarn')) {
-                $class = 'S1SYPHOS\\Drivers\\Yarn';
+                $class = 'Fundevogel\\Thx\\Drivers\\Yarn';
             }
 
             # (2) NPM
             if (static::contains($lockFilename, 'package')) {
-                $class = 'S1SYPHOS\\Drivers\\Node';
+                $class = 'Fundevogel\\Thx\\Drivers\\Node';
             }
         }
 
@@ -198,7 +198,7 @@ class Thx
     /**
      * Gives back & shares the love
      *
-     * @return \S1SYPHOS\Packaging\Packages Processed data
+     * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
     public function giveBack()
     {
