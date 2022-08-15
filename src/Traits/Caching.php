@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fundevogel\Thx\Traits;
 
-use Fundevogel\Thx\Exceptions\NoJuiceException;
-use Fundevogel\Thx\Exceptions\NoMannersException;
+use Shieldon\SimpleCache\Cache;
 
+use Exception;
 
 trait Caching
 {
@@ -13,21 +15,13 @@ trait Caching
      */
 
     /**
-     * Cache driver
-     *
-     * @var \Shieldon\SimpleCache\Cache
-     */
-    public $cache;
-
-
-    /**
      * Holds tokens of all possible cache drivers
      *
      * See https://github.com/terrylinooo/simple-cache
      *
      * @var array
      */
-    protected $cacheDrivers = [
+    private array $cacheDrivers = [
         'file',
         'redis',
         'mongo',
@@ -42,27 +36,19 @@ trait Caching
 
 
     /**
+     * Cache driver
+     *
+     * @var \Shieldon\SimpleCache\Cache
+     */
+    public Cache $cache;
+
+
+    /**
      * Defines cache duration (in days)
      *
      * @var int
      */
-    protected $cacheDuration = 7;
-
-
-    /**
-     * Setters & getters
-     */
-
-    public function setCacheDuration(int $cacheDuration): void
-    {
-        $this->cacheDuration = $cacheDuration;
-    }
-
-
-    public function getCacheDuration(): string
-    {
-        return $this->cacheDuration;
-    }
+    public int $cacheDuration = 7;
 
 
     /**
@@ -74,26 +60,27 @@ trait Caching
      *
      * @param string $cacheDriver Cache driver
      * @param array $cacheSettings Cache settings
-     * @return void
+     * @return \Shieldon\SimpleCache\Cache
+     * @throws Exception
      */
-    protected function createCache(string $cacheDriver = 'file', array $cacheSettings = [])
+    protected function createCache(string $cacheDriver = 'file', array $cacheSettings = []): Cache
     {
         # Initialize cache
         # (1) Validate provided cache driver
-        if (in_array($cacheDriver, $this->cacheDrivers) === false) {
-            throw new NoJuiceException(sprintf('Cache driver "%s" cannot be initiated', $cacheDriver));
+        if (!in_array($cacheDriver, $this->cacheDrivers)) {
+            throw new Exception(sprintf('Cache driver "%s" cannot be initiated', $cacheDriver));
         }
 
         # (2) Merge caching options with defaults
         $cacheSettings = array_merge(['storage'   => './.cache'], $cacheSettings);
 
         # (2) Create path to caching directory (if not existent) when required by cache driver
-        if (in_array($cacheDriver, ['file', 'sqlite']) === true) {
+        if (in_array($cacheDriver, ['file', 'sqlite'])) {
             $this->createDir($cacheSettings['storage']);
         }
 
         # (4) Initialize new cache instance
-        $cache = new \Shieldon\SimpleCache\Cache($cacheDriver, $cacheSettings);
+        $cache = new Cache($cacheDriver, $cacheSettings);
 
         # (5) Build database if using SQLite for the first time
         # TODO: Add check for MySQL, see https://github.com/terrylinooo/simple-cache/issues/8
@@ -111,6 +98,7 @@ trait Caching
      * @param string $dir The path for the new directory
      * @param bool $recursive Create all parent directories, which don't exist
      * @return bool True: the dir has been created, false: creating failed
+     * @throws Exception
      */
     protected function createDir(string $dir, bool $recursive = true): bool
     {
@@ -131,7 +119,7 @@ trait Caching
         }
 
         if (is_writable($parent) === false) {
-            throw new NoMannersException(sprintf('The directory "%s" cannot be created', $dir));
+            throw new Exception(sprintf('The directory "%s" cannot be created', $dir));
         }
 
         return mkdir($dir);

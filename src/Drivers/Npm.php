@@ -1,26 +1,16 @@
 <?php
 
-namespace Fundevogel\Thx\Drivers;
+declare(strict_types=1);
 
+namespace Fundevogel\Thx\Drivers;
 
 use Fundevogel\Thx\Driver;
 use Fundevogel\Thx\Packaging\Packages;
 
+use Shieldon\SimpleCache\Cache;
 
-class Node extends Driver
+class Npm extends Driver
 {
-    /**
-     * Properties
-     */
-
-    /**
-     * Operating mode identifier
-     *
-     * @var string
-     */
-    public $mode = 'npm';
-
-
     /**
      * Methods
      */
@@ -28,7 +18,7 @@ class Node extends Driver
     /**
      * Extracts raw data from input files
      *
-     * @param string $dataFile Path to data file
+     * @param array $pkgData Path to data file
      * @param string $lockFile Lockfile contents
      * @return array
      */
@@ -42,7 +32,7 @@ class Node extends Driver
             if ($this->contains($pkgName, 'node_modules/')) {
                 $pkgName = str_replace('node_modules/', '', $pkgName);
 
-                if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
+                if (isset($pkgData['dependencies'][$pkgName])) {
                     $data[$pkgName] = $pkg;
                 }
             }
@@ -59,9 +49,9 @@ class Node extends Driver
      * @param array $config Configuration options
      * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages
+    protected function process(Cache $cache, array $config): Packages
     {
-        $pkgs = array_map(function($pkgName, $pkg) use ($cache, $config) {
+        $pkgs = array_map(function (string $pkgName, array $pkg) use ($cache, $config) {
             $data = [];
 
             # Build unique caching key
@@ -76,7 +66,9 @@ class Node extends Driver
             if (empty($data)) {
                 # (2) .. from API
                 # Block unwanted libraries
-                if (in_array($pkgName, $config['blockList']) === true) return false;
+                if (in_array($pkgName, $config['blockList'])) {
+                    return false;
+                }
 
                 # Prepare data for each repository
                 $data['name'] = $pkgName;
@@ -94,7 +86,7 @@ class Node extends Driver
                 $response = json_decode($response)->collected->metadata;
 
                 # Split URL & set pointer to last entry
-                $repoURL = $response->links->repository;
+                $repoURL = $response->links->repository ?? $response->links->npm;
 
                 $splitList = static::split($repoURL, '/');
                 end($splitList);

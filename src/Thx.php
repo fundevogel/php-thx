@@ -1,20 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Thx - Acknowledge the people behind your frontend dependencies - and give thanks!
  *
- * @link https://github.com/Fundevogel/php-thx
+ * @link https://codeberg.org/Fundevogel/php-thx
  * @license https://opensource.org/licenses/MIT MIT
  */
 
 namespace Fundevogel\Thx;
 
-use Fundevogel\Thx\Exceptions\NoJuiceException;
-use Fundevogel\Thx\Exceptions\NoMannersException;
-
 use Fundevogel\Thx\Traits\Helpers;
 use Fundevogel\Thx\Traits\Caching;
-
 
 /**
  * Class Thx
@@ -23,14 +21,8 @@ use Fundevogel\Thx\Traits\Caching;
  *
  * @package php-thx
  */
-class Thx
+final class Thx
 {
-    /**
-     * Current version
-     */
-    const VERSION = '1.2.1';
-
-
     /**
      * Traits
      */
@@ -44,7 +36,7 @@ class Thx
      *
      * @var array
      */
-    protected $blockList = [];
+    public array $blockList = [];
 
 
     /**
@@ -52,7 +44,7 @@ class Thx
      *
      * @var \Fundevogel\Thx\Driver
      */
-    public $driver;
+    public Driver $driver;
 
 
     /**
@@ -60,7 +52,7 @@ class Thx
      *
      * @var int
      */
-    protected $timeout = 3;
+    public int $timeout = 3;
 
 
     /**
@@ -68,47 +60,7 @@ class Thx
      *
      * @var string
      */
-    protected $userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0';
-
-
-    /**
-     * Setters & getters
-     */
-
-    public function setBlockList(array $blockList): void
-    {
-        $this->blockList = $blockList;
-    }
-
-
-    public function getBlockList(): array
-    {
-        return $this->blockList;
-    }
-
-
-    public function setTimeout(int $timeout): void
-    {
-        $this->timeout = $timeout;
-    }
-
-
-    public function getTimeout(): string
-    {
-        return $this->timeout;
-    }
-
-
-    public function setUserAgent(string $userAgent): void
-    {
-        $this->userAgent = $userAgent;
-    }
-
-
-    public function getUserAgent(): string
-    {
-        return $this->userAgent;
-    }
+    public string $userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0';
 
 
     /**
@@ -125,75 +77,14 @@ class Thx
         # Create cache instance
         $this->cache = $this->createCache($cacheDriver, $cacheSettings);
 
-        # Select appropriate driver for files
-        # (1) Validate lockfile
-        $lockFilename = basename($lockFile);
-
-        if (
-            !static::contains($lockFilename, 'composer') &&
-            !static::contains($lockFilename, 'yarn') &&
-            !static::contains($lockFilename, 'package')
-        ) {
-            throw new NoMannersException(sprintf('Unknown lockfile: "%s".', $lockFilename));
-        }
-
-        # (2) Determine package manager by ..
-        $lockFile = @file_get_contents($lockFile);
-
-        # .. loading package data
-        $pkgData = json_decode(file_get_contents($dataFile), true);
-
-        # .. matching filenames
-        $dataFilename = basename($dataFile);
-
-        if ($dataFilename === 'composer.json') {
-            if (in_array('require', array_keys($pkgData)) === false) {
-                throw new NoJuiceException(sprintf('%s does not contain "require".', $dataFilename));
-            }
-
-            $class = 'Fundevogel\\Thx\\Drivers\\Composer';
-        }
-
-        if ($dataFilename === 'package.json') {
-            if (in_array('dependencies', array_keys($pkgData)) === false) {
-                throw new NoJuiceException(sprintf('%s does not contain "dependencies".', $dataFilename));
-            }
-
-            # (1) Yarn
-            if (static::contains($lockFilename, 'yarn')) {
-                $class = 'Fundevogel\\Thx\\Drivers\\Yarn';
-            }
-
-            # (2) NPM
-            if (static::contains($lockFilename, 'package')) {
-                $class = 'Fundevogel\\Thx\\Drivers\\Node';
-            }
-        }
-
-        # (3) Validate datafile
-        if (!isset($class)) {
-            throw new NoMannersException(sprintf('Unknown datafile: "%s".', $dataFilename));
-        }
-
-        # (4) Instantiate appropriate class
-        $this->driver = new $class($pkgData, $lockFile);
+        # Instantiate driver
+        $this->driver = Factory::create($dataFile, $lockFile);
     }
 
 
     /**
      * Methods
      */
-
-    /**
-     * Exports raw data
-     *
-     * @return array
-     */
-    public function data(): array
-    {
-        return $this->driver->data;
-    }
-
 
     /**
      * Gives back & shares the love

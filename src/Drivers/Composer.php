@@ -1,25 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fundevogel\Thx\Drivers;
 
 use Fundevogel\Thx\Driver;
 use Fundevogel\Thx\Packaging\Packages;
 
+use Shieldon\SimpleCache\Cache;
 
 class Composer extends Driver
 {
-    /**
-     * Properties
-     */
-
-    /**
-     * Operating mode identifier
-     *
-     * @var string
-     */
-    public $mode = 'php';
-
-
     /**
      * Methods
      */
@@ -27,7 +18,7 @@ class Composer extends Driver
     /**
      * Extracts raw data from input files
      *
-     * @param string $dataFile Path to data file
+     * @param array $pkgData Path to data file
      * @param string $lockFile Lockfile contents
      * @return array
      */
@@ -38,7 +29,7 @@ class Composer extends Driver
         $data = [];
 
         foreach ($lockData['packages'] as $pkg) {
-            if (in_array($pkg['name'], array_keys($pkgData['require'])) === true) {
+            if (isset($pkgData['require'][$pkg['name']])) {
                 $data[$pkg['name']] = $pkg;
             }
         }
@@ -54,9 +45,9 @@ class Composer extends Driver
      * @param array $config Configuration options
      * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages
+    protected function process(Cache $cache, array $config): Packages
     {
-        $pkgs = array_map(function($pkgName, $pkg) use ($cache, $config) {
+        $pkgs = array_map(function (string $pkgName, array $pkg) use ($cache, $config) {
             $data = [];
 
             # Build unique caching key
@@ -71,7 +62,9 @@ class Composer extends Driver
             # (2) .. from API (if not)
             if (empty($data)) {
                 # Block unwanted libraries
-                if (in_array($pkgName, $config['blockList']) === true) return false;
+                if (in_array($pkgName, $config['blockList'])) {
+                    return false;
+                }
 
                 # Prepare data for each repository by determining ..
                 # (1) .. name of repository

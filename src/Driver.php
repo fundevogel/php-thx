@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fundevogel\Thx;
 
-
+use Fundevogel\Thx\Packaging\Packages;
 use Fundevogel\Thx\Traits\Helpers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\TransferException;
+use Shieldon\SimpleCache\Cache;
 
 abstract class Driver
 {
@@ -24,21 +29,13 @@ abstract class Driver
      *
      * @var array
      */
-    public $data = null;
-
-
-    /**
-     * Operating mode identifier
-     *
-     * @var string
-     */
-    public $mode;
+    public array $data;
 
 
     /**
      * Constructor
      *
-     * @param string $pkgData Content of datafile as array
+     * @param array $pkgData Content of datafile as array
      * @param string $lockFile Content of lockfile as string
      * @param string $cacheDriver Cache driver
      * @param array $cacheSettings Cache settings
@@ -62,7 +59,7 @@ abstract class Driver
      * @param array $config Configuration options
      * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    public function spreadLove(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages
+    public function spreadLove(Cache $cache, array $config): Packages
     {
         # Process raw data
         return $this->process($cache, $config);
@@ -73,14 +70,14 @@ abstract class Driver
      * Fetches information from API endpoint
      *
      * @param string $apiURL API endpoint
-     * @param int $timeout Request timeout in seconds
+     * @param int $timeout Request timeout (in seconds)
      * @param string $userAgent User-Agent header
      * @return string Response text - empty if connection failed
      */
     protected function fetchRemote(string $apiURL, int $timeout = 3, string $userAgent = ''): string
     {
         # Initialize HTTP client
-        $client = new \GuzzleHttp\Client(['timeout'  => $timeout]);
+        $client = new Client(['timeout'  => $timeout]);
 
         try {
             # Fetch data from API
@@ -90,11 +87,12 @@ abstract class Driver
             # (2) If successful ..
             if ($response->getStatusCode() === 200) {
                 # .. save response
-                return $response->getBody();
+                return (string) $response->getBody();
             }
 
-        # .. otherwise, return empty text
-        } catch (\GuzzleHttp\Exception\TransferException $e) {}
+            # .. otherwise, return empty text
+        } catch (TransferException $e) {
+        }
 
         return '';
     }
@@ -107,7 +105,7 @@ abstract class Driver
     /**
      * Extracts raw data from input files
      *
-     * @param string $dataFile Path to data file
+     * @param array $pkgData Path to data file
      * @param string $lockFile Lockfile contents
      * @return array Extracted data
      */
@@ -121,5 +119,5 @@ abstract class Driver
      * @param array $config Configuration options
      * @return \Fundevogel\Thx\Packaging\Packages Processed data
      */
-    abstract protected function process(\Shieldon\SimpleCache\Cache $cache, array $config): \Fundevogel\Thx\Packaging\Packages;
+    abstract protected function process(Cache $cache, array $config): Packages;
 }

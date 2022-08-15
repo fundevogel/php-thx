@@ -1,12 +1,13 @@
 <?php
 
-namespace Fundevogel\Thx\Packaging;
+declare(strict_types=1);
 
-use Countable;
-use Iterator;
+namespace Fundevogel\Thx\Packaging;
 
 use Fundevogel\Thx\Traits\Helpers;
 
+use Countable;
+use Iterator;
 
 class Collection implements Countable, Iterator
 {
@@ -43,9 +44,9 @@ class Collection implements Countable, Iterator
     /**
      * Returns the current object
      *
-     * @return \Fundevogel\Thx\Package
+     * @return self
      */
-    public function current()
+    public function current(): self
     {
         return current($this->data);
     }
@@ -65,9 +66,9 @@ class Collection implements Countable, Iterator
     /**
      * Moves the cursor to the next object and returns it
      *
-     * @return \Fundevogel\Thx\Package
+     * @return self
      */
-    public function next()
+    public function next(): self
     {
         return next($this->data);
     }
@@ -76,9 +77,9 @@ class Collection implements Countable, Iterator
     /**
      * Moves the cursor to the previous object and returns it
      *
-     * @return \Fundevogel\Thx\Package
+     * @return self
      */
-    public function prev()
+    public function prev(): self
     {
         return prev($this->data);
     }

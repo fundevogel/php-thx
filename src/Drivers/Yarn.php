@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fundevogel\Thx\Drivers;
 
-
-use Fundevogel\Thx\Drivers\Node;
-
-
-class Yarn extends Node
+class Yarn extends Npm
 {
     /**
      * Methods
@@ -15,7 +13,7 @@ class Yarn extends Node
     /**
      * Extracts raw data from input files
      *
-     * @param string $dataFile Path to data file
+     * @param array $pkgData Path to data file
      * @param string $lockFile Lockfile contents
      * @return array
      */
@@ -28,29 +26,24 @@ class Yarn extends Node
 
         if ($this->contains($lockFile, $v1)) {
             # Version 1 = not YAML
-            $this->mode = 'yarn-v1';
-
             $lockData = $this->parseLockFile($lockFile);
 
             foreach ($lockData as $pkgName => $pkg) {
                 $pkgName = substr($pkgName, 0, strpos($pkgName, '@'));
 
-                if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
+                if (isset($pkgData['dependencies'][$pkgName])) {
                     $data[$pkgName] = $pkg;
                 }
             }
-
         } else {
             # Version 2 = YAML
-            $this->mode = 'yarn-v2';
-
             $lockData = yaml_parse($lockFile);
 
             foreach ($lockData as $pkgName => $pkg) {
                 if ($this->contains($pkgName, '@npm')) {
                     $pkgName = $this->split($pkgName, '@npm')[0];
 
-                    if (in_array($pkgName, array_keys($pkgData['dependencies'])) === true) {
+                    if (isset($pkgData['dependencies'][$pkgName])) {
                         $data[$pkgName] = $pkg;
                     }
                 }
@@ -85,15 +78,15 @@ class Yarn extends Node
      * Parses v1 yarn lockfile
      *
      * @param string $string The filestream to be parsed
-     * @return string The result array representing its content
+     * @return array The result array representing its content
      */
-    protected function parseLockFile($lockStream): array
+    protected function parseLockFile(string $lockStream): array
     {
         # Prepare data array
         $lockData = [];
 
         # Initialize base key
-        $key = null;
+        $key = '';
 
         # Initialize dependency states
         $isDependency = false;
@@ -103,7 +96,9 @@ class Yarn extends Node
 
         foreach (explode("\n", $lockStream) as $index => $line) {
             # Skip first four lines
-            if ($index < 4 || $line === '') continue;
+            if ($index < 4 || $line === '') {
+                continue;
+            }
 
             # Determine nesting level
             $level = strlen($line) - strlen(ltrim($line));
@@ -128,7 +123,7 @@ class Yarn extends Node
                 $lockData[$key] = [];
             }
 
-            # Second level:
+            # Second level:null
             # - Reset 'dependency' states
             # - Add array for 'dependencies'
             # - Add array for 'optionalDependencies'

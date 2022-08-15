@@ -2,12 +2,9 @@
 
 namespace Fundevogel\Thx\Tests;
 
-
 use Fundevogel\Thx\Thx;
-use Fundevogel\Thx\Exceptions\NoMannersException;
 
 use PHPUnit\Framework\TestCase;
-
 
 class ThxTest extends TestCase
 {
@@ -55,10 +52,10 @@ class ThxTest extends TestCase
      * Tests
      */
 
-    public function testNoMannersException(): void
+    public function testException(): void
     {
         # Assert exception
-        $this->expectException(NoMannersException::class);
+        $this->expectException(Exception::class);
 
         # Run function
         $obj = new Thx('some-data.json', 'some-lock.json');

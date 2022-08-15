@@ -1,7 +1,8 @@
 <?php
 
-namespace Fundevogel\Thx\Packaging;
+declare(strict_types=1);
 
+namespace Fundevogel\Thx\Packaging;
 
 class Packages extends Collection
 {
@@ -48,7 +49,8 @@ class Packages extends Collection
      *
      * @return array Package names
      */
-    public function packages(): array {
+    public function packages(): array
+    {
         return $this->pluck($this->data, 'name');
     }
 
@@ -58,7 +60,8 @@ class Packages extends Collection
      *
      * @return array License names
      */
-    public function licenses(): array {
+    public function licenses(): array
+    {
         $data = [];
 
         foreach ($this->data as $pkg) {
@@ -80,7 +83,8 @@ class Packages extends Collection
      *
      * @return array Package names
      */
-    public function byLicense(): array {
+    public function byLicense(): array
+    {
         $data = [];
 
         foreach ($this->data as $pkg) {
