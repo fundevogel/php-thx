@@ -1,0 +1,17 @@
+pipeline:
+  build:
+    image: jitesoft/composer:${PHP}
+    commands:
+      # Install dependencies
+      - composer install
+
+      # Run PHPUnit tests
+      - composer run test
+
+    when:
+      event: push
+
+matrix:
+  PHP:
+    - 8.0  # EOL 2020-11-26, SS 2023-10-26
+    - 8.1  # EOL 2023-11-25, SS 2024-11-25

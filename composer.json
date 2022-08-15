@@ -5,7 +5,7 @@
     "license": "MIT",
     "version": "1.2.1",
     "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness"],
-    "homepage": "https://github.com/Fundevogel",
+    "homepage": "https://codeberg.org/Fundevogel",
     "scripts": {
         "lint": "pint --verbose",
         "test": "phpunit"

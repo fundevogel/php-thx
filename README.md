@@ -1,5 +1,5 @@
 # php-thx
-[![Release](https://img.shields.io/github/release/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/releases) [![License](https://img.shields.io/github/license/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/blob/main/LICENSE) [![Issues](https://img.shields.io/github/issues/Fundevogel/php-thx.svg)](https://github.com/Fundevogel/php-thx/issues) [![Status](https://travis-ci.org/Fundevogel/php-thx.svg?branch=main)](https://travis-ci.org/Fundevogel/php-thx)
+[![License](https://badgen.net/badge/license/GPL/blue)](https://codeberg.org/fundevogel/php-thx/src/branch/main/LICENSE) [![Packagist](https://badgen.net/packagist/v/fundevogel/php-thx)](https://packagist.org/packages/fundevogel/php-thx) [![Build](https://ci.codeberg.org/api/badges/Fundevogel/php-pcbis/status.svg)](https://codeberg.org/fundevogel/php-thx/issues)
 
 A very simple PHP library for acknowledging the people behind your frontend dependencies - and giving thanks.
 
@@ -9,7 +9,7 @@ A very simple PHP library for acknowledging the people behind your frontend depe
 Install this package with [Composer](https://getcomposer.org):
 
 ```text
-composer require Fundevogel/php-thx
+composer require fundevogel/php-thx
 ```
 
 **Note:**
@@ -131,14 +131,14 @@ try {
 
 ## Roadmap
 
-- [x] ~~Add (more sophisticated) tests~~ for now, they get the job done
+- [x] ~~Add (more sophisticated)~~ tests get the job done (for now)
 - [x] Parse yarn v1 lockfiles
 - [x] Gather information using public APIs
-- [x] Custom `Exception`s
+- [x] ~~Custom `Exception`s~~
 - [x] Move data manipulation to uniform `Packages` class
 - [ ] Provide more (sorting/filtering) methods, eg ..
     - [x] .. `byLicense()` = 'MIT' => [...], 'GPL v3' => [...] etc
-    - .. `byDownloads()` = '2k' => [...], '1k' => [...] etc
+    - ~~.. `byDownloads()` = '2k' => [...], '1k' => [...] etc~~
 
 
 ## Credits
