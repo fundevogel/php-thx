@@ -7,8 +7,7 @@
     "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness"],
     "homepage": "https://github.com/Fundevogel",
     "scripts": {
-        "cs-dry": "php-cs-fixer fix --dry-run --diff",
-        "cs-fix": "php-cs-fixer fix",
+        "lint": "pint --verbose",
         "test": "phpunit"
     },
     "authors": [
@@ -26,12 +25,15 @@
         }
     ],
     "require": {
-        "shieldon/simple-cache": "^1.3",
-        "guzzlehttp/guzzle": "^7.3"
+        "php": "^8.0",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.4",
+        "shieldon/simple-cache": "^1.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.14",
-        "phpunit/phpunit": "^8.1"
+        "laravel/pint": "^1.1",
+        "phpunit/phpunit": "^9.0",
+        "vimeo/psalm": "^4.26"
     },
     "autoload": {
         "psr-4": {
