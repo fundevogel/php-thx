@@ -12,8 +12,6 @@ Install this package with [Composer](https://getcomposer.org):
 composer require fundevogel/php-thx
 ```
 
-**Note:** For yarn v2 support, the `php-yaml` package is required!
-
 
 ## Usage
 

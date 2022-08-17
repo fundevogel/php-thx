@@ -7,6 +7,8 @@ namespace Fundevogel\Thx\Drivers\Node;
 use Fundevogel\Thx\Utilities\A;
 use Fundevogel\Thx\Utilities\Str;
 
+use Spyc;
+
 /**
  * Class Yarn
  *
@@ -190,7 +192,11 @@ class Yarn extends Npm
      */
     private function parseLockFileV2(string $lockStream): array
     {
-        return yaml_parse($lockStream);
+        # Remove BOM
+        $string = str_replace("\xEF\xBB\xBF", '', $lockStream);
+
+        # Load YAML data
+        return Spyc::YAMLLoadString($string);
     }
 
 
