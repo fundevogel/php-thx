@@ -1,0 +1,9 @@
+{
+    "require": {
+        "fundevogel/php-mastodon": "^0.6.0",
+        "fundevogel/php-pcbis": "^4.0",
+        "fundevogel/tiny-phpeanuts": "^1.0",
+        "s1syphos/php-thx": "^1.2",
+        "s1syphos/php-gesetze": "^0.7.1"
+    }
+}
