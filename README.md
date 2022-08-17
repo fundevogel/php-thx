@@ -1,7 +1,7 @@
 # php-thx
-[![License](https://badgen.net/badge/license/GPL/blue)](https://codeberg.org/fundevogel/php-thx/src/branch/main/LICENSE) [![Packagist](https://badgen.net/packagist/v/fundevogel/php-thx)](https://packagist.org/packages/fundevogel/php-thx) [![Build](https://ci.codeberg.org/api/badges/Fundevogel/php-pcbis/status.svg)](https://codeberg.org/fundevogel/php-thx/issues)
+[![License](https://badgen.net/badge/license/GPL/blue)](https://codeberg.org/fundevogel/php-thx/src/branch/main/LICENSE) [![Packagist](https://badgen.net/packagist/v/fundevogel/php-thx)](https://packagist.org/packages/fundevogel/php-thx) [![Build](https://ci.codeberg.org/api/badges/Fundevogel/php-thx/status.svg)](https://codeberg.org/fundevogel/php-thx/issues)
 
-A very simple PHP library for acknowledging the people behind your frontend dependencies - and giving thanks.
+A very simple PHP library for acknowledging the people behind your dependencies - and giving thanks.
 
 
 ## Getting started
@@ -12,115 +12,23 @@ Install this package with [Composer](https://getcomposer.org):
 composer require fundevogel/php-thx
 ```
 
-**Note:**
-For yarn v2 support, the `php-yaml` package is required!
+**Note:** For yarn v2 support, the `php-yaml` package is required!
 
 
 ## Usage
 
-First, determine the paths to your files (datafile & lockfile, see below):
+Spreading love & giving back should be easy, like this:
 
 ```php
-<?php
+use Fundevogel\Thx\ThankYou;
 
-require_once('vendor/autoload.php');
-
-use Fundevogel\Thx;
-
-$pkgFile = 'path/to/composer.json';                # or 'package.json' for NPM / Yarn
-$lockFile = 'path/to/composer.lock'                # or 'package-lock.json' for NPM / 'yarn.lock' for Yarn
-$cacheDriver = 'file';                             # Optional: Cache driver, see below
-$cacheSettings = ['storage' => '/path/to/cache'];  # Optional: Cache settings, see below
-```
-
-**Note:**
-For available cache drivers & settings, see [here](https://github.com/terrylinooo/simple-cache)!
-
-Passing these options to `new Thx()` creates an instance:
-
-```php
-$obj = new Thx($pkgFile, $lockFile, $cacheDriver, $cacheSettings);
-```
-
-.. which you may configure to your liking by using:
-
-- `setTimeout(int $seconds)`
-- `setCacheDuration(int $days)`
-- `setUserAgent(string $userAgent)`
-- `setBlockList(array $blockList)`
-
-```php
-# For example:
-
-$obj->setCacheDuration(7);                    # Cache results for one week
-$obj->setBlockList(['php', 'some/library']);  # Block from being processed
-```
-
-After setting everything up, `giveBack()` makes some API calls & returns processed data, wrapped by a `Packages` object:
-
-- Composer packages @ https://repo.packagist.org
-- Node packages @ https://api.npms.io
-
-```php
-$processed = $obj->giveBack();
-```
-
-At this point, there are three basic methods you can use:
-
-- `data()` returns raw data from lockfile for all used packages
-- `pkgs()` returns processed data for all used packages
-- `packages()` returns the names of all used packages
-
-```php
-# Dump raw data
-$raw = $obj->data();
-
-# Process data
-$processed = $obj->giveBack();
-
-# Work with it
-$pkgData = $processed->pkgs();
-```
-
-For convenience, there are methods to
-
-- list licenses & number of occurences: `licenses()`
-- group packages by license: `byLicense()`
-
-```php
-$licenseData = $processed->licenses();
-$groupedByLicense = $processed->byLicense();
-```
-
-
-## Example
-
-This example should get you started:
-
-```php
-<?php
-
-require_once('vendor/autoload.php');
-
-use Fundevogel\Thx;
-
-$pkgFile = 'path/to/composer.json';  # or 'package.json' for NPM / Yarn
-$lockFile = 'path/to/composer.lock'  # or 'package-lock.json' for NPM / 'yarn.lock' for Yarn
+# Define paths to necessary files
+$dataFile = 'path/to/composer.json';  # .. 'package.json'
+$lockFile = 'path/to/composer.lock'   # .. 'package-lock.json' or 'yarn.lock'
 
 try {
-    $obj = new Thx($pkgFile, $lockFile);
-
-    # Dump (raw) data extracted from lockfiles
-    var_dump($obj->data());
-
-    # Process data
-    $processed = $obj->giveBack();
-
-    # Dump package data
-    var_dump($processed->pkgs())
-
-    # Dump package names
-    var_dump($processed->packages())
+    # Extract & extend dataset
+    $data = ThankYou::veryMuch($dataFile, $lockFile);
 
 } catch (Exception $e) {
     # No dependencies found, file not found, ..
@@ -128,22 +36,34 @@ try {
 }
 ```
 
+.. and in case you want to have more control, instantiate the appropriate `Driver` & configure it as needed:
+
+```php
+use Fundevogel\Thx\ThankYou;
+
+$driver = ThankYou::haveFun($dataFile, $lockFile);
+
+# Configuration for API calls
+$driver->timeout = 3600  # request timeout (in seconds)
+$driver->userAgent = 'YoursSincerely'  # request UA string
+```
+
+By themselves, the files you already have don't yield much information (mostly package name & installed version), yet this is all we need to know to .. make some API calls (which is done automatically):
+
+- Composer packages @ https://repo.packagist.org
+- Node packages @ https://api.npms.io
+
+**Note**: As always when requesting data from third-parties, make sure to implement some kind of caching so you don't get blocked or exceed whatever limit they impose, and remember: going easy on somebody else's ressources (especially when they're provided for free) shows that you care, and that's always worth striving for.
+
 
 ## Roadmap
 
-- [x] ~~Add (more sophisticated)~~ tests get the job done (for now)
-- [x] Parse yarn v1 lockfiles
-- [x] Gather information using public APIs
-- [x] ~~Custom `Exception`s~~
-- [x] Move data manipulation to uniform `Packages` class
-- [ ] Provide more (sorting/filtering) methods, eg ..
-    - [x] .. `byLicense()` = 'MIT' => [...], 'GPL v3' => [...] etc
-    - ~~.. `byDownloads()` = '2k' => [...], '1k' => [...] etc~~
+- [ ] Check out v3 npm `lockfileVersion`
+- [ ] Check out v3 npm `lockfileVersion`
 
 
 ## Credits
 
 Most of the helper functions were taken from [Kirby](https://getkirby.com)'s excellent [`toolkit`](https://github.com/getkirby-v2/toolkit) package by [Bastian Allgeier](https://github.com/bastianallgeier) (who's just awesome, btw).
-
 
 **Happy coding!**
