@@ -1,10 +1,10 @@
 {
     "name": "fundevogel/php-thx",
-    "description": "Acknowledge the people behind your frontend dependencies - and give thanks!",
+    "description": "Acknowledge the people behind your dependencies - give back & spread love!",
     "type": "library",
     "license": "MIT",
     "version": "1.2.1",
-    "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness"],
+    "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness", "love"],
     "homepage": "https://codeberg.org/Fundevogel",
     "scripts": {
         "lint": "pint --verbose",
@@ -27,8 +27,7 @@
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^7.4",
-        "shieldon/simple-cache": "^1.3"
+        "guzzlehttp/guzzle": "^7.4"
     },
     "require-dev": {
         "laravel/pint": "^1.1",

@@ -1,7 +1,9 @@
-# Composer + sensitive files
+# Composer
 /composer.lock
 /vendor
+
+# Cache files
 *.cache
 
-# Auto-generated
-/dist
+# NodeJS packages
+/tests/fixtures/**/node_modules

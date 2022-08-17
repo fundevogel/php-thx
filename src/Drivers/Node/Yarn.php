@@ -2,8 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Fundevogel\Thx\Drivers;
+namespace Fundevogel\Thx\Drivers\Node;
 
+use Fundevogel\Thx\Utilities\A;
+use Fundevogel\Thx\Utilities\Str;
+
+/**
+ * Class Yarn
+ *
+ * Processes 'Yarnpkg' files
+ */
 class Yarn extends Npm
 {
     /**
@@ -13,39 +21,44 @@ class Yarn extends Npm
     /**
      * Extracts raw data from input files
      *
-     * @param array $pkgData Path to data file
-     * @param string $lockFile Lockfile contents
      * @return array
      */
-    protected function extract(array $pkgData, string $lockFile): array
+    public function extract(): array
     {
+        # Create data array
         $data = [];
 
         # Distinguish versions
-        $v1 = '# yarn lockfile v1';
-
-        if ($this->contains($lockFile, $v1)) {
+        if (Str::contains($this->lockFile, '# yarn lockfile v1')) {
             # Version 1 = not YAML
-            $lockData = $this->parseLockFile($lockFile);
+            $lockData = $this->parseLockFileV1($this->lockFile);
 
             foreach ($lockData as $pkgName => $pkg) {
-                $pkgName = substr($pkgName, 0, strpos($pkgName, '@'));
+                # Determine package name
+                $pkgName = $this->getPackageNameV1($pkgName);
 
-                if (isset($pkgData['dependencies'][$pkgName])) {
+                if (isset($this->pkgData['dependencies'][$pkgName])) {
                     $data[$pkgName] = $pkg;
                 }
             }
         } else {
             # Version 2 = YAML
-            $lockData = yaml_parse($lockFile);
+            $lockData = $this->parseLockFileV2($this->lockFile);
 
             foreach ($lockData as $pkgName => $pkg) {
-                if ($this->contains($pkgName, '@npm')) {
-                    $pkgName = $this->split($pkgName, '@npm')[0];
+                # Respect packages ..
+                # (1) .. from official registry (default)
+                if (Str::contains($pkgName, '@npm')) {
+                    $pkgName = Str::split($pkgName, '@npm')[0];
+                }
 
-                    if (isset($pkgData['dependencies'][$pkgName])) {
-                        $data[$pkgName] = $pkg;
-                    }
+                # (2) .. from Git repositories (= forks, dev builds, ..)
+                if (Str::contains($pkgName, '@git')) {
+                    $pkgName = Str::split($pkgName, '@git')[0];
+                }
+
+                if (isset($this->pkgData['dependencies'][$pkgName])) {
+                    $data[$pkgName] = $pkg;
                 }
             }
         }
@@ -55,32 +68,12 @@ class Yarn extends Npm
 
 
     /**
-     * Removes redundant characters from strings
-     *
-     * @param string $string The string to be normalized
-     * @return string The result string
-     */
-    protected function normalize(string $string): string
-    {
-        # From end of string, remove
-        # - colon
-        # - apostrophes
-        $string = rtrim(rtrim($string, ':'), '"');
-
-        # From start of string, remove
-        # - whitespaces
-        # - apostrophes
-        return ltrim(ltrim($string), '"');
-    }
-
-
-    /**
-     * Parses v1 yarn lockfile
+     * Parses v1 lockfile
      *
      * @param string $string The filestream to be parsed
-     * @return array The result array representing its content
+     * @return array Extracted data
      */
-    protected function parseLockFile(string $lockStream): array
+    private function parseLockFileV1(string $lockStream): array
     {
         # Prepare data array
         $lockData = [];
@@ -101,10 +94,10 @@ class Yarn extends Npm
             }
 
             # Determine nesting level
-            $level = strlen($line) - strlen(ltrim($line));
+            $level = Str::length($line) - Str::length(Str::ltrim($line));
 
             # Normalize line
-            $line = $this->normalize($line);
+            $line = $this->cleanString($line);
 
             # First level:
             # - Reset 'dependency' states
@@ -115,15 +108,15 @@ class Yarn extends Npm
                 $isOptionalDependency = false;
                 $isPeerDependency = false;
 
-                if ($this->contains($line, ',')) {
-                    $line = $this->split($line, ',')[0];
+                if (Str::contains($line, ',')) {
+                    $line = Str::split($line, ',')[0];
                 }
 
                 $key = $line;
                 $lockData[$key] = [];
             }
 
-            # Second level:null
+            # Second level:
             # - Reset 'dependency' states
             # - Add array for 'dependencies'
             # - Add array for 'optionalDependencies'
@@ -159,9 +152,9 @@ class Yarn extends Npm
                 }
 
                 # Prepare key-value pair
-                $list = $this->split($line, ' ');
-                $currentKey = $list[0];
-                $currentValue = $this->normalize($list[1]);
+                $list = Str::split($line, ' ');
+                $currentKey = $this->cleanString($list[0]);
+                $currentValue = $this->cleanString($list[1]);
 
                 $lockData[$key][$currentKey] = $currentValue;
             }
@@ -186,5 +179,60 @@ class Yarn extends Npm
         }
 
         return $lockData;
+    }
+
+
+    /**
+     * Parses v2 lockfile
+     *
+     * @param string $string The filestream to be parsed
+     * @return array Extracted data
+     */
+    private function parseLockFileV2(string $lockStream): array
+    {
+        return yaml_parse($lockStream);
+    }
+
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * Determines package name (v1 only)
+     *
+     * '@my/package@^1.2.3' => '@my/package'
+     * 'our/package@^1.2.3' => 'our/package'
+     *
+     * @param string $pkgName
+     * @return string
+     */
+    private function getPackageNameV1(string $pkgName): string
+    {
+        # Split along every 'at' symbol
+        $array = Str::split($pkgName, '@');
+
+        # Remove last part (= version string)
+        array_pop($array);
+
+        # Put remains back together
+        return A::join($array, '@');
+    }
+
+
+    /**
+     * Removes redundant characters from strings (v1 only)
+     *
+     * @param string $string
+     * @return string
+     */
+    private function cleanString(string $string): string
+    {
+        # Remove ..
+        # (1) .. apostrophes & colon from end
+        $string = Str::rtrim(Str::rtrim($string, ':'), '"');
+
+        # (2) .. apostrophes & whitespaces from start
+        return Str::ltrim(Str::ltrim($string), '"');
     }
 }
