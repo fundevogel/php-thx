@@ -2,8 +2,8 @@
     "name": "fundevogel/php-thx",
     "description": "Acknowledge the people behind your dependencies - give back & spread love!",
     "type": "library",
-    "license": "MIT",
-    "version": "1.2.1",
+    "license": "GPL-3.0",
+    "version": "2.0.0",
     "keywords": ["gratitude", "appreciation", "gratefulness", "thankfulness", "love"],
     "homepage": "https://codeberg.org/Fundevogel",
     "scripts": {
@@ -24,6 +24,11 @@
             "role": "Developer"
         }
     ],
+    "support": {
+        "email": "maschinenraum@fundevogel.de",
+        "source": "https://codeberg.org/Fundevogel/php-pcbis",
+        "issues": "https://codeberg.org/Fundevogel/php-pcbis/issues"
+    },
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
