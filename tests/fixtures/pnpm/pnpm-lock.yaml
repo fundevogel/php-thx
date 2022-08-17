@@ -1,0 +1,49 @@
+lockfileVersion: 5.4
+
+specifiers:
+  animejs: ^3.2.1
+  bigpicture: git+https://github.com/fundevogel/bigpicture.git
+  lazysizes: ^5.3.2
+  pnpm: ^7.9.3
+  tippy.js: ^6.3.7
+
+dependencies:
+  animejs: 3.2.1
+  bigpicture: github.com/fundevogel/bigpicture/7a8f66767614360dde8678768c192078b699b744
+  lazysizes: 5.3.2
+  tippy.js: 6.3.7
+
+devDependencies:
+  pnpm: 7.9.3
+
+packages:
+
+  /@popperjs/core/2.11.6:
+    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
+  /animejs/3.2.1:
+    resolution: {integrity: sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==}
+    dev: false
+
+  /lazysizes/5.3.2:
+    resolution: {integrity: sha512-22UzWP+Vedi/sMeOr8O7FWimRVtiNJV2HCa+V8+peZOw6QbswN9k58VUhd7i6iK5bw5QkYrF01LJbeJe0PV8jg==}
+    dev: false
+
+  /pnpm/7.9.3:
+    resolution: {integrity: sha512-0hpAD1vtILw0i9gTN4ffagnScWMW9/avfZIKllBUd++fAvCss+hVgPPDd0HS9XcOT675gid4H9esGkbLdaFy+w==}
+    engines: {node: '>=14.6'}
+    hasBin: true
+    dev: true
+
+  /tippy.js/6.3.7:
+    resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
+    dependencies:
+      '@popperjs/core': 2.11.6
+    dev: false
+
+  github.com/fundevogel/bigpicture/7a8f66767614360dde8678768c192078b699b744:
+    resolution: {tarball: https://codeload.github.com/fundevogel/bigpicture/tar.gz/7a8f66767614360dde8678768c192078b699b744}
+    name: bigpicture
+    version: 2.5.3
+    dev: false

@@ -56,7 +56,7 @@ By themselves, the files you already have don't yield much information (mostly p
 
 ## Roadmap
 
-- [ ] Check out v3 npm `lockfileVersion`
+- [x] Add support for `pnpm`
 - [ ] Check out v3 npm `lockfileVersion`
 
 

@@ -38,6 +38,10 @@ class ThankYouTest extends \PHPUnit\Framework\TestCase
                 'data' => __DIR__ . '/fixtures/npm-v2/package.json',
                 'lock' => __DIR__ . '/fixtures/npm-v2/package-lock.json',
             ],
+            'pnpm' => [
+                'data' => __DIR__ . '/fixtures/pnpm/package.json',
+                'lock' => __DIR__ . '/fixtures/pnpm/pnpm-lock.yaml',
+            ],
             'yarn-v1' => [
                 'data' => __DIR__ . '/fixtures/yarn-v1/package.json',
                 'lock' => __DIR__ . '/fixtures/yarn-v1/yarn.lock',
@@ -152,6 +156,49 @@ class ThankYouTest extends \PHPUnit\Framework\TestCase
     {
         # Run function
         $data = ThankYou::veryMuch(self::$files['npm-v2']['data'], self::$files['npm-v2']['lock']);
+
+        # Assert result
+        $this->assertEquals($data, [
+            [
+                'name' => 'animejs',
+                'version' => '3.2.1',
+                'maintainer' => 'juliangarnier',
+                'license' => 'MIT',
+                'description' => 'JavaScript animation engine',
+                'url' => 'https://github.com/juliangarnier/anime'
+            ],
+            [
+                'name' => 'bigpicture',
+                'version' => '2.5.3',
+                'maintainer' => 'henrygd',
+                'license' => 'MIT',
+                'description' => 'Lightweight image and video viewer, supports youtube / vimeo',
+                'url' => 'https://github.com/henrygd/bigpicture'
+            ],
+            [
+                'name' => 'lazysizes',
+                'version' => '5.3.2',
+                'maintainer' => 'aFarkas',
+                'license' => 'MIT',
+                'description' => 'High performance (jankfree) lazy loader for images (including responsive images), iframes and scripts (widgets).',
+                'url' => 'https://github.com/aFarkas/lazysizes'
+            ],
+            [
+                'name' => 'tippy.js',
+                'version' => '6.3.7',
+                'maintainer' => 'atomiks',
+                'license' => 'MIT',
+                'description' => 'The complete tooltip, popover, dropdown, and menu solution for the web',
+                'url' => 'https://github.com/atomiks/tippyjs'
+            ],
+        ]);
+    }
+
+
+    public function testPnpm(): void
+    {
+        # Run function
+        $data = ThankYou::veryMuch(self::$files['pnpm']['data'], self::$files['pnpm']['lock']);
 
         # Assert result
         $this->assertEquals($data, [

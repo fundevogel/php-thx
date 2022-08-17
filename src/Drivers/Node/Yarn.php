@@ -192,11 +192,8 @@ class Yarn extends Npm
      */
     private function parseLockFileV2(string $lockStream): array
     {
-        # Remove BOM
-        $string = str_replace("\xEF\xBB\xBF", '', $lockStream);
-
         # Load YAML data
-        return Spyc::YAMLLoadString($string);
+        return $this->parseYaml($lockStream);
     }
 
 

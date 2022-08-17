@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fundevogel\Thx\Drivers;
 
 use GuzzleHttp\Client;
+use Spyc;
 
 /**
  * Class Driver
@@ -110,4 +111,24 @@ abstract class Driver
      * @return array Processed data
      */
     abstract protected function extend(array $data): array;
+
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * Parses YAML string
+     *
+     * @param string $stream YAML file content
+     * @return array Extracted data
+     */
+    protected function parseYaml(string $stream): array
+    {
+        # Remove BOM
+        $string = str_replace("\xEF\xBB\xBF", '', $stream);
+
+        # Load YAML data
+        return Spyc::YAMLLoadString($string);
+    }
 }

@@ -13,9 +13,9 @@ namespace Fundevogel\Thx;
 
 use Fundevogel\Thx\Drivers\Driver;
 use Fundevogel\Thx\Drivers\Node\Npm;
+use Fundevogel\Thx\Drivers\Node\Pnpm;
 use Fundevogel\Thx\Drivers\Node\Yarn;
 use Fundevogel\Thx\Drivers\Php\Composer;
-use Fundevogel\Thx\Utilities\Str;
 
 /**
  * Class ThankYou
@@ -84,12 +84,17 @@ final class ThankYou
             $lockFilename = basename($lockFile);
 
             # (a) NPM
-            if (Str::contains($lockFilename, 'package')) {
+            if ($lockFilename == 'package-lock.json') {
                 return new Npm($pkgData, $lockData);
             }
 
-            # (b) Yarn
-            if (Str::contains($lockFilename, 'yarn')) {
+            # (b) PNPM
+            if ($lockFilename == 'pnpm-lock.yaml') {
+                return new Pnpm($pkgData, $lockData);
+            }
+
+            # (c) Yarn
+            if ($lockFilename == 'yarn.lock') {
                 return new Yarn($pkgData, $lockData);
             }
 
